@@ -1,0 +1,53 @@
+<app-dialog-header
+  title="Preferences"
+  [icon]="icons.preferences"
+  (closeClick)="cancel()" />
+
+<mat-dialog-content class="preferences-dialog__content">
+  <div class="preferences-layout">
+    <!-- Left sidebar menu -->
+    <app-sidebar-menu
+      [items]="categories()"
+      [selectedId]="selectedCategoryId()"
+      ariaLabel="Preferences categories"
+      classPrefix="preferences"
+      (selectionChange)="selectCategory($event)" />
+
+    <!-- Right content area -->
+    <div class="preferences-content">
+      @for (category of categories(); track category.id) {
+        @if (selectedCategoryId() === category.id) {
+          <div class="preferences-section">
+            <h3 class="preferences-section__title">
+              <fa-icon [icon]="category.icon"></fa-icon>
+              {{ category.label }}
+            </h3>
+
+            <div class="preferences-options">
+              @for (preference of getPreferencesForCategory(category.id); track preference.id) {
+                <div class="preferences-option">
+                  <div class="preferences-option__info">
+                    <span class="preferences-option__label">{{ preference.label }}</span>
+                    <span class="preferences-option__description">{{ preference.description }}</span>
+                  </div>
+                  <mat-slide-toggle
+                    [checked]="preference.enabled"
+                    (change)="togglePreference(preference.id)"
+                    color="primary"
+                  ></mat-slide-toggle>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      }
+    </div>
+  </div>
+</mat-dialog-content>
+
+<app-form-actions
+  [dialogMode]="true"
+  [saving]="saving()"
+  submitLabel="Save Changes"
+  (cancelClick)="cancel()"
+  (submitClick)="save()" />

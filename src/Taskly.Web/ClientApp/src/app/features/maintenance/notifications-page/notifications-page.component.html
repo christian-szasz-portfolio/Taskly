@@ -1,0 +1,122 @@
+<app-maintenance-page-layout
+  title="Notifications"
+  description="View and manage your notification history."
+  heroVariant="rose"
+  [loading]="loading()"
+  [error]="error()"
+  [isEmpty]="isEmpty()"
+  emptyMessage="No notifications found."
+  [filtersVisible]="filtersVisible()"
+  [hasActiveFilters]="hasActiveFilters()"
+  [pageIndex]="pageIndex()"
+  [pageSize]="pageSize()"
+  [totalItems]="totalItems()"
+  [filtersTemplate]="filtersRef"
+  [tableTemplate]="tableRef"
+  [emptyIconTemplate]="emptyIconRef"
+  (refreshClick)="refresh()"
+  (toggleFiltersClick)="toggleFilters()"
+  (clearFiltersClick)="clearFilters()"
+  (pageChange)="onPageChange($event)"
+>
+</app-maintenance-page-layout>
+
+<!-- Filter Fields Template -->
+<ng-template #filtersRef>
+  <app-date-picker-input
+    label="From Date"
+    placeholder="YYYY-MM-DD"
+    [ngModel]="fromDate()"
+    (ngModelChange)="fromDate.set($event)"
+  ></app-date-picker-input>
+
+  <app-date-picker-input
+    label="To Date"
+    placeholder="YYYY-MM-DD"
+    [ngModel]="toDate()"
+    (ngModelChange)="toDate.set($event)"
+  ></app-date-picker-input>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Type</mat-label>
+    <mat-select [value]="typeFilter()" (selectionChange)="typeFilter.set($event.value)">
+      @for (option of typeOptions; track option.label) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Read Status</mat-label>
+    <mat-select [value]="readStatusFilter()" (selectionChange)="readStatusFilter.set($event.value)">
+      @for (option of readStatusOptions; track option.value) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Search by title..."
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)"
+    />
+    <fa-icon matSuffix [icon]="icons.search"></fa-icon>
+  </mat-form-field>
+</ng-template>
+
+<!-- Table Template -->
+<ng-template #tableRef>
+  <table class="maintenance-page__table">
+    <thead>
+      <tr>
+        <th class="col-type">Type</th>
+        <th>Title</th>
+        <th>Message</th>
+        <th class="col-status">Status</th>
+        <th>Created</th>
+        <th>Read At</th>
+        <th class="col-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (notification of notifications(); track notification.id) {
+        <tr [class.is-unread]="!notification.isRead">
+          <td>
+            <span class="type-badge" [class]="getTypeClass(notification.type)">
+              <fa-icon [icon]="getTypeIcon(notification.type)"></fa-icon>
+            </span>
+          </td>
+          <td class="cell-title">{{ notification.title }}</td>
+          <td class="cell-message">{{ notification.message ?? '—' }}</td>
+          <td>
+            <span class="read-status" [class.is-read]="notification.isRead">
+              <fa-icon [icon]="notification.isRead ? icons.read : icons.unread"></fa-icon>
+              {{ notification.isRead ? 'Read' : 'Unread' }}
+            </span>
+          </td>
+          <td>{{ notification.createdAtUtc | date:'dd.MM.yyyy HH:mm:ss' : 'UTC' }} UTC</td>
+          <td>{{ notification.readAtUtc ? (notification.readAtUtc | date:'dd.MM.yyyy HH:mm:ss' : 'UTC') + ' UTC' : '—' }}</td>
+          <td>
+            <button
+              mat-icon-button
+              type="button"
+              [matTooltip]="notification.isRead ? 'Mark as unread' : 'Mark as read'"
+              (click)="toggleReadStatus(notification)"
+            >
+              <fa-icon [icon]="notification.isRead ? icons.markUnread : icons.markRead"></fa-icon>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</ng-template>
+
+<!-- Empty Icon Template -->
+<ng-template #emptyIconRef>
+  <fa-icon [icon]="icons.header"></fa-icon>
+</ng-template>

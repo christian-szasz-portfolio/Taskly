@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Taskly.Common/Taskly.Common.csproj" />
+    <Project Path="src/Taskly.Contracts/Taskly.Contracts.csproj" />
+    <Project Path="src/Taskly.Web/Taskly.Web.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/Taskly.Common.Test/Taskly.Common.Test.csproj" />
+    <Project Path="test/Taskly.Web.Test/Taskly.Web.Test.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,112 @@
+<section class="comment-section" aria-labelledby="comments-heading">
+  <header class="comment-section__header">
+    <div class="comment-section__title">
+      <fa-icon [icon]="commentsIcon" class="comment-section__icon"></fa-icon>
+      <h2 id="comments-heading">Comments</h2>
+      <span class="comment-section__count">{{ commentCount() }}</span>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <div class="comment-section__skeleton">
+      @for (i of [1, 2, 3]; track i) {
+        <app-skeleton-loader variant="list-item" />
+      }
+    </div>
+  } @else if (error()) {
+    <div class="comment-section__error" role="alert">
+      <p>{{ error() }}</p>
+      <button mat-stroked-button color="primary" (click)="loadComments(targetId(), targetType())">
+        Retry
+      </button>
+    </div>
+  } @else {
+    <!-- Comment list -->
+    <div class="comment-section__list" role="list">
+      @if (!hasComments()) {
+        <p class="comment-section__empty">No comments yet. Be the first to comment!</p>
+      } @else {
+        @for (comment of comments(); track comment.id) {
+          <app-comment-item
+            [comment]="comment"
+            [currentUserId]="currentUserId()"
+            [depth]="0"
+            [readonly]="readonly()"
+            (reply)="startReply($event)"
+            (edit)="startEdit($event)"
+            (delete)="onDelete($event)"
+            (toggleReaction)="onReactionToggle($event)"
+          ></app-comment-item>
+        }
+      }
+    </div>
+
+    <!-- Comment editor - hidden in read-only mode -->
+    @if (!readonly()) {
+      <div class="comment-section__editor" [class.comment-section__editor--expanded]="isEditorExpanded()">
+        @if (!isEditorExpanded()) {
+          <button
+            class="comment-section__expand-btn"
+            type="button"
+            (click)="expandEditor()"
+          >
+            Write a comment...
+          </button>
+        } @else {
+          <div class="comment-section__editor-header">
+            @if (isReplying()) {
+              <span class="comment-section__editor-context">
+                <fa-icon [icon]="replyIcon"></fa-icon>
+                Replying to <strong>{{ replyingTo()?.authorName }}</strong>
+              </span>
+            } @else if (isEditing()) {
+              <span class="comment-section__editor-context">
+                Editing your comment
+              </span>
+            }
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Cancel"
+              matTooltip="Cancel"
+              (click)="collapseEditor()"
+            >
+              <fa-icon [icon]="cancelIcon"></fa-icon>
+            </button>
+          </div>
+
+          <app-rich-text-editor
+            [value]="editorContent()"
+            [placeholder]="editorPlaceholder()"
+            (valueChange)="onEditorChange($event)"
+          ></app-rich-text-editor>
+
+          <div class="comment-section__editor-actions">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="collapseEditor()"
+              [disabled]="submitting()"
+            >
+              Cancel
+            </button>
+            <button
+              mat-flat-button
+              color="primary"
+              type="button"
+              (click)="submit()"
+              [disabled]="submitting() || !editorContent().trim()"
+            >
+              @if (submitting()) {
+                <mat-spinner diameter="18"></mat-spinner>
+              } @else {
+                <fa-icon [icon]="sendIcon"></fa-icon>
+                {{ submitLabel() }}
+              }
+            </button>
+          </div>
+        }
+      </div>
+    }
+  }
+</section>

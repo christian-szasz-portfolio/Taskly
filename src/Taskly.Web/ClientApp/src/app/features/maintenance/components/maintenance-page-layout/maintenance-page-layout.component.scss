@@ -1,0 +1,8 @@
+// Maintenance Page Layout Component Styles
+// Uses shared maintenance page styles from the feature's styles folder
+// Includes page-layout, hero, toolbar, tabs, filters, content-area, table, state-indicators
+
+@use '../../styles/maintenance-page' as maintenance;
+
+// Include all shared styles
+@include maintenance.all();

@@ -1,0 +1,141 @@
+@use '../../styles/mixins' as mixins;
+
+:host {
+  display: block;
+}
+
+.date-picker-field {
+  width: 100%;
+}
+
+.date-picker-button {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.date-picker-menu {
+  padding: 0;
+}
+
+::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-title+.mat-mdc-dialog-content {
+  padding-top: 12px;
+  padding-bottom: 24px;
+}
+
+::ng-deep .mat-mdc-menu-panel {
+  max-width: none;
+  margin-top: 0.25rem;
+}
+
+.calendar-menu {
+  padding: 0.5rem 0.75rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 320px;
+}
+
+.calendar-menu__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  // Smaller prev/next arrows
+  .mat-mdc-icon-button {
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.calendar-header__nav-icon {
+  font-size: 0.7rem;
+  color: var(--text-tertiary);
+}
+
+.calendar-header__selectors {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.calendar-header__select {
+  width: auto;
+  min-width: 4.5rem;
+
+  ::ng-deep {
+    .mat-mdc-select-trigger {
+      padding: 0.35rem 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 0.375rem;
+      background-color: var(--input-bg);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+      &:hover {
+        border-color: var(--text-tertiary);
+      }
+    }
+
+    .mat-mdc-select-value {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .mat-mdc-select-arrow-wrapper {
+      padding-left: 0.5rem;
+    }
+
+    .mat-mdc-select-arrow {
+      color: var(--text-tertiary);
+    }
+  }
+
+  &.mat-focused ::ng-deep .mat-mdc-select-trigger {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px var(--focus-ring);
+  }
+}
+
+// Compact dropdown options for calendar header selects
+::ng-deep .cdk-overlay-pane:not(.mat-mdc-select-panel-above) .mat-mdc-select-panel {
+  background-color: var(--surface-card);
+
+  .mat-mdc-option {
+    min-height: 32px;
+    padding: 0 12px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+
+    &:hover:not(.mdc-list-item--disabled) {
+      background-color: rgba(var(--brand-primary-rgb), 0.08);
+    }
+
+    &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+      background-color: rgba(var(--brand-primary-rgb), 0.12);
+      color: var(--brand-primary);
+    }
+
+    &:focus.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+      background-color: rgba(var(--brand-primary-rgb), 0.15);
+    }
+  }
+
+  // Thin, subtle scrollbar
+  @include mixins.custom-scrollbar('vertical', 4px);
+}
+
+// Thin scrollbar for calendar body
+::ng-deep .mat-calendar-content {
+  @include mixins.custom-scrollbar('vertical', 4px);
+}

@@ -1,0 +1,66 @@
+.topbar__account {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.account-trigger {
+	border: 1px solid var(--hero-border-strong);
+	border-radius: 50%;
+	background: var(--hero-overlay-hover);
+	color: var(--text-on-brand);
+	width: 44px;
+	height: 44px;
+	display: grid;
+	place-items: center;
+	transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+	padding: 0;
+
+	&:hover {
+		background: var(--topbar-bg);
+		transform: translateY(-1px);
+		border-color: var(--hero-border-strong);
+	}
+}
+
+.account-trigger fa-icon {
+	font-size: 1.1rem;
+}
+
+.account-menu {
+	position: absolute;
+	top: calc(100% + 0.65rem);
+	right: 0;
+	min-width: 210px;
+	padding: 0.75rem;
+	border-radius: 0.75rem;
+	background: var(--topbar-bg);
+	border: 1px solid var(--overlay-light);
+	box-shadow: var(--shadow-md);
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	z-index: 5;
+}
+
+.account-menu__item {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	width: 100%;
+	padding: 0.45rem 0.5rem;
+	background: transparent;
+	border: none;
+	color: var(--topbar-text);
+	font-weight: 500;
+	text-align: left;
+	border-radius: 0.6rem;
+	cursor: pointer;
+	transition: background 0.2s ease, transform 0.2s ease;
+
+	&:hover,
+	&:focus-visible {
+		background: var(--overlay-light);
+		transform: translateX(2px);
+	}
+}

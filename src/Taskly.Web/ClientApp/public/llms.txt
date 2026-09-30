@@ -1,0 +1,9 @@
+# Taskly — live demo
+
+> A live demo of Taskly: project and issue tracking with a Kanban board, epics, time tracking, reporting and real-time notifications, built on .NET 10 and Angular 22. A CQRS backend where controllers only dispatch, and a board that updates live over SignalR. The demo data is seeded in memory and resets; this is a portfolio piece, not a product.
+
+## More
+
+- Case study: https://christianszasz.dev/work/taskly
+- Source: https://github.com/christian-szasz-portfolio/Taskly
+- Author: https://christianszasz.dev

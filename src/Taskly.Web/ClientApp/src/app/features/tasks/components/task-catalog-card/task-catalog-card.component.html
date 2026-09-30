@@ -1,0 +1,35 @@
+<article class="catalog-card">
+  <div class="catalog-card__primary">
+    <span class="catalog-card__key">{{ issueKey() ?? 'Unkeyed' }}</span>
+    <h2>{{ title() }}</h2>
+  </div>
+  <div class="catalog-card__actions">
+    @if (primaryAction(); as action) {
+      <span [matTooltip]="action.disabled ? (action.disabledTooltip ?? action.tooltip ?? action.label) : (action.tooltip ?? action.label)">
+        <button
+          mat-icon-button
+          type="button"
+          class="catalog-card__action"
+          [class]="'catalog-card__action--' + (action.accent ?? 'emerald')"
+          [class.catalog-card__action--disabled]="action.disabled"
+          [attr.aria-label]="action.label"
+          [attr.aria-disabled]="action.disabled || null"
+          [disabled]="action.disabled"
+          (click)="handlePrimaryAction($event)"
+        >
+          <fa-icon [icon]="action.icon"></fa-icon>
+        </button>
+      </span>
+    }
+    <button
+      mat-icon-button
+      type="button"
+      class="catalog-card__link"
+      aria-label="Open in new tab"
+      matTooltip="Open in new tab"
+      (click)="open($event)"
+    >
+      <fa-icon [icon]="linkIcon"></fa-icon>
+    </button>
+  </div>
+</article>

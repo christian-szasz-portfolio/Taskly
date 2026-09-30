@@ -1,0 +1,16 @@
+root = true
+
+[*.cs]
+# SA1633: File should have header - not needed in test projects
+dotnet_diagnostic.SA1633.severity = none
+
+# SA0001: XML comment analysis disabled - not needed in test projects
+dotnet_diagnostic.SA0001.severity = none
+
+# IDE0003: Simplify member access - keep this. explicit qualification is preferred
+dotnet_diagnostic.IDE0003.severity = none
+
+# CS1591: Missing XML comment for publicly visible type or member - not needed in test projects
+dotnet_diagnostic.CS1591.severity = none
+
+dotnet_diagnostic.IDE0290.severity = warning

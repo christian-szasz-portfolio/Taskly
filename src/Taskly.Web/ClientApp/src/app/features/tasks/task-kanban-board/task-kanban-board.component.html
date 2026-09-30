@@ -1,0 +1,71 @@
+@let cards = insightCards();
+@let rows = boardRows();
+
+<main class="kanban" aria-live="polite">
+  <app-task-hero-section
+    [cards]="cards"
+    [stats]="stats()"
+    [heroIcons]="heroIcons()"
+    (refresh)="refresh()"
+  />
+
+  <div class="kanban__board-area" [class.kanban__board-area--panel-open]="isPanelOpen()">
+    <section
+      class="kanban__board-container"
+      cdkDropListGroup
+      #columnsArea
+    >
+      @for (row of rows; track row.type === 'parent-with-subtasks' ? row.parent?.id : 'other-issues') {
+        @if (row.type === 'parent-with-subtasks' && row.parent) {
+          <app-kanban-parent-row
+            [parent]="row.parent"
+            [subtasks]="row.subtasks ?? []"
+            [isExpanded]="row.isExpanded"
+            [columns]="getRowColumns(row)"
+            [helpers]="cardHelpers"
+            [addCardIcon]="icons().addCard"
+            [chevronDown]="icons().chevronDown"
+            [chevronRight]="icons().chevronRight"
+            [viewIcon]="icons().view"
+            [externalLinkIcon]="icons().externalLink"
+            [resolveIcon]="icons().resolve"
+            [canWrite]="canWrite()"
+            (toggleExpansion)="toggleRowExpansion($event)"
+            (itemDropped)="drop($event.event, $event.status)"
+            (itemSelected)="openDetailPanel($event.task, $event.event)"
+            (parentSelected)="openDetailPanel($event.task, $event.event)"
+            (resolveParent)="onResolveParent($event)"
+          />
+        } @else {
+          <app-kanban-other-row
+            [tasks]="row.tasks ?? []"
+            [isExpanded]="row.isExpanded"
+            [columns]="getRowColumns(row)"
+            [helpers]="cardHelpers"
+            [addCardIcon]="icons().addCard"
+            [chevronDown]="icons().chevronDown"
+            [chevronRight]="icons().chevronRight"
+            [canWrite]="canWrite()"
+            (toggleExpansion)="toggleRowExpansion('other-issues')"
+            (itemDropped)="drop($event.event, $event.status)"
+            (itemSelected)="openDetailPanel($event.task, $event.event)"
+          />
+        }
+      }
+    </section>
+
+    @if (isPanelOpen()) {
+      <app-task-detail-panel
+        [panelWidth]="panelWidth()"
+        [panelHeight]="panelHeight()"
+        [task]="selectedTask()"
+        [helpers]="cardHelpers"
+        [panelIcons]="panelIcons()"
+        [canWrite]="canWrite()"
+        (startResize)="startResize($event)"
+        (closePanel)="closeDetailPanel()"
+        (editTask)="editFromPanel($event)"
+      />
+    }
+  </div>
+</main>

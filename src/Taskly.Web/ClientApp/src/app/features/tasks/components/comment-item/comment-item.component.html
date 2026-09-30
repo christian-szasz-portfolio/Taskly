@@ -1,0 +1,83 @@
+<article class="comment-item" [class.comment-item--nested]="depth() > 0" role="listitem">
+  <div class="comment-item__avatar" [attr.aria-label]="'Avatar for ' + comment().authorName">
+    <span class="comment-item__initials">{{ authorInitials() }}</span>
+  </div>
+
+  <div class="comment-item__content">
+    <header class="comment-item__header">
+      <div class="comment-item__meta">
+        <span class="comment-item__author">{{ comment().authorName }}</span>
+        <span class="comment-item__date">{{ formattedDate() }}</span>
+        @if (editedLabel()) {
+          <span class="comment-item__edited">{{ editedLabel() }}</span>
+        }
+      </div>
+
+      <div class="comment-item__actions">
+        @if (!readonly()) {
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Reply to comment"
+            matTooltip="Reply"
+            (click)="onReply()"
+            [class.comment-item__action--hidden]="!canNest()"
+          >
+            <fa-icon [icon]="replyIcon" size="sm"></fa-icon>
+          </button>
+
+          @if (isOwner()) {
+            <button
+              mat-icon-button
+              type="button"
+              [matMenuTriggerFor]="commentMenu"
+              aria-label="Comment options"
+              matTooltip="More options"
+            >
+              <fa-icon [icon]="menuIcon" size="sm"></fa-icon>
+            </button>
+
+            <mat-menu #commentMenu="matMenu">
+              <button mat-menu-item (click)="onEdit()">
+                <fa-icon [icon]="editIcon"></fa-icon>
+                <span>Edit</span>
+              </button>
+              <button mat-menu-item class="comment-item__delete-action" (click)="onDelete()">
+                <fa-icon [icon]="deleteIcon"></fa-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          }
+        }
+      </div>
+    </header>
+
+    <div class="comment-item__body" [appRichTextHtml]="comment().content"></div>
+
+    <footer class="comment-item__footer">
+      <app-comment-reactions
+        [reactions]="comment().reactions ?? []"
+        [currentUserId]="currentUserId()"
+        (toggleReaction)="onToggleReaction($event)"
+      ></app-comment-reactions>
+    </footer>
+
+    <!-- Nested replies -->
+    @if (hasReplies()) {
+      <div class="comment-item__replies" role="list">
+        @for (reply of comment().replies; track reply.id) {
+          <app-comment-item
+            [comment]="reply"
+            [currentUserId]="currentUserId()"
+            [depth]="nextDepth()"
+            [readonly]="readonly()"
+            (reply)="onNestedReply($event)"
+            (edit)="onNestedEdit($event)"
+            (delete)="onNestedDelete($event)"
+            (toggleReaction)="onNestedToggleReaction($event)"
+          ></app-comment-item>
+        }
+      </div>
+    }
+  </div>
+</article>

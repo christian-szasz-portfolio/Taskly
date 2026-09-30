@@ -1,0 +1,21 @@
+<app-task-catalog-page
+  eyebrow="Backlog registry"
+  title="Prioritize what's next"
+  description="Review newly created items and decide which ones are ready to move forward into the task."
+  [theme]="CatalogTheme.Emerald"
+  [isEmpty]="isEmpty()"
+  emptyTitle="No backlog items yet."
+  emptyHint="Create a new task item from the kanban board to populate the backlog."
+  [boardRoute]="boardRoute()"
+  (refreshed)="refresh()"
+>
+  @for (item of backlogItems(); track item.id) {
+    <app-task-catalog-card
+      [issueKey]="item.issueKey"
+      [title]="item.title"
+      [primaryAction]="moveToOpenAction()"
+      (opened)="openItem(item)"
+      (primaryActionClicked)="moveToOpen(item)"
+    />
+  }
+</app-task-catalog-page>

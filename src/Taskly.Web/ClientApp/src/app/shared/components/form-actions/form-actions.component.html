@@ -1,0 +1,60 @@
+@if (dialogMode()) {
+  <!-- Dialog mode uses mat-dialog-actions -->
+  <mat-dialog-actions [attr.align]="align()">
+    <ng-container *ngTemplateOutlet="actionContent" />
+  </mat-dialog-actions>
+} @else {
+  <!-- Standalone form mode -->
+  <div class="form-actions" [class]="'align-' + align()">
+    <ng-container *ngTemplateOutlet="actionContent" />
+  </div>
+}
+
+<ng-template #actionContent>
+  <!-- Delete button (optional) -->
+  @if (showDelete()) {
+    <button
+      mat-button
+      type="button"
+      color="warn"
+      class="delete-btn"
+      [matTooltip]="deleteTooltip()"
+      [disabled]="saving()"
+      (click)="onDelete()">
+      <fa-icon [icon]="deleteIcon"></fa-icon>
+      {{ deleteLabel() }}
+    </button>
+  }
+
+  <!-- Projected content (custom left-side actions) -->
+  <ng-content />
+
+  <!-- Spacer to push cancel/submit to the right -->
+  <span class="spacer"></span>
+
+  <!-- Cancel button -->
+  @if (showCancel()) {
+    <button
+      mat-button
+      type="button"
+      [disabled]="saving()"
+      (click)="onCancel()">
+      {{ cancelLabel() }}
+    </button>
+  }
+
+  <!-- Submit button -->
+  <button
+    mat-flat-button
+    color="primary"
+    [type]="submitType()"
+    [disabled]="isSubmitDisabled"
+    (click)="onSubmit()">
+    @if (saving()) {
+      <mat-spinner diameter="18" class="button-spinner"></mat-spinner>
+      <span>{{ savingLabel() }}</span>
+    } @else {
+      <span>{{ submitLabel() }}</span>
+    }
+  </button>
+</ng-template>

@@ -1,0 +1,22 @@
+<app-dialog-header
+  title="An error occurred"
+  [icon]="icon"
+  titleClass="error-title"
+  (closeClick)="dismiss()" />
+
+<mat-dialog-content>
+  @if (data.title) {
+    <h3 class="section-heading">Title</h3>
+    <p class="error-exception">{{ data.title }}</p>
+  }
+  @if (data.description) {
+    <h3 class="section-heading">Description</h3>
+    <p class="error-description">{{ data.description }}</p>
+  }
+  <p class="error-question">Reload?</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  <button mat-button type="button" (click)="dismiss()">No</button>
+  <button mat-flat-button color="primary" type="button" (click)="reload()">Yes</button>
+</mat-dialog-actions>

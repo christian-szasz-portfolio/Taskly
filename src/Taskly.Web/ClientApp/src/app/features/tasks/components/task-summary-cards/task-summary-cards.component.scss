@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.task-detail-page__summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.summary-card {
+  background: var(--surface-card);
+  border-radius: 16px;
+  padding: 1rem;
+  border: 1px solid var(--border-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.summary-card__label {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.summary-card__value {
+  font-size: 1rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.summary-card__icon {
+  font-size: 1.05rem;
+}
+
+.summary-card__value--status,
+.summary-card__value--priority,
+.summary-card__value--type {
+  text-transform: none;
+}
+
+.summary-card__value--time {
+  color: var(--accent-sky);
+}

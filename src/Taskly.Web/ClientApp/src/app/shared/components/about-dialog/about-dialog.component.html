@@ -1,0 +1,49 @@
+<app-dialog-header
+  title="About"
+  [icon]="icons.about"
+  (closeClick)="close()" />
+
+<mat-dialog-content class="about-dialog__content">
+  <div class="about-dialog__user-info">
+    <div class="info-row">
+      <div class="info-label">
+        <fa-icon [icon]="icons.user"></fa-icon>
+        <span>Name</span>
+      </div>
+      <div class="info-value">{{ fullName() }}</div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="info-row">
+      <div class="info-label">
+        <fa-icon [icon]="icons.email"></fa-icon>
+        <span>Email</span>
+      </div>
+      <div class="info-value">{{ email() }}</div>
+    </div>
+
+
+    @if (formattedTrialExpiry()) {
+      <mat-divider></mat-divider>
+
+      <div class="info-row">
+        <div class="info-label">
+          <fa-icon [icon]="icons.calendar"></fa-icon>
+          <span>Trial Expires</span>
+        </div>
+        <div class="info-value trial-expiry">{{ formattedTrialExpiry() }}</div>
+      </div>
+    }
+  </div>
+
+  <div class="about-dialog__app-info">
+    <p class="app-name">Taskly</p>
+    <p class="app-version">Version 1.0.0</p>
+    <p class="app-copyright">© {{ currentYear() }} All rights reserved</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" (click)="close()">Close</button>
+</mat-dialog-actions>

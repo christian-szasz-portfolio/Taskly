@@ -1,0 +1,24 @@
+<div class="topbar__account" #accountMenuRef>
+	<button
+		mat-icon-button
+		type="button"
+		class="account-trigger"
+		aria-haspopup="true"
+		[attr.aria-expanded]="isOpen()"
+		[attr.aria-controls]="menuIdentifier()"
+		aria-label="Account menu"
+		(click)="toggleMenu($event)"
+	>
+		<fa-icon [icon]="icon()" size="lg"></fa-icon>
+	</button>
+	@if (isOpen()) {
+		<div class="account-menu" [attr.id]="menuIdentifier()" role="menu">
+			@for (item of items(); track item.label) {
+				<button type="button" class="account-menu__item" role="menuitem" (click)="handleSelection(item)">
+					<fa-icon [icon]="item.icon"></fa-icon>
+					<span>{{ item.label }}</span>
+				</button>
+			}
+		</div>
+	}
+</div>

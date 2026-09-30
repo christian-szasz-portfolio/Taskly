@@ -1,0 +1,68 @@
+<section class="kanban__hero" [class.kanban__hero--collapsed]="collapsed()">
+  <div class="hero__copy">
+    @if (!collapsed()) {
+      <p class="hero__eyebrow">
+        <fa-icon [icon]="heroIcons().sparkles"></fa-icon>
+        Responsive Tasks
+      </p>
+    }
+    <div class="hero__title-row">
+      <h1>Make progress with clarity</h1>
+      <button
+        mat-icon-button
+        type="button"
+        class="hero__collapse-btn"
+        [attr.aria-pressed]="collapsed()"
+        [attr.aria-label]="collapseLabel()"
+        matTooltip="{{ collapseLabel() }}"
+        (click)="toggleCollapsed()"
+      >
+        <fa-icon [icon]="collapsed() ? collapseIcons.collapsed : collapseIcons.expanded"></fa-icon>
+      </button>
+    </div>
+    @if (!collapsed()) {
+      <p class="hero__body">
+        Track status, unblock teammates, and celebrate wins with a crisp, modern task surface.
+      </p>
+    }
+    <div class="hero__actions">
+      <span [matTooltip]="createDisabledNote">
+        <button
+          mat-icon-button
+          color="primary"
+          class="hero__icon-btn hero__icon-btn--disabled"
+          disabled
+          aria-label="Create task"
+        >
+          <fa-icon [icon]="heroIcons().create"></fa-icon>
+        </button>
+      </span>
+      <button
+        mat-icon-button
+        color="primary"
+        class="hero__refresh-btn"
+        aria-label="Refresh board"
+        matTooltip="Refresh board"
+        (click)="refresh.emit()"
+      >
+        <fa-icon [icon]="heroIcons().refresh"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+  @if (!collapsed()) {
+    <div class="hero__panel">
+      @for (card of cards(); track card.label) {
+        <article class="hero-card">
+          <fa-icon [icon]="card.icon"></fa-icon>
+          <div>
+            <p>{{ card.label }}</p>
+            <strong>{{ card.value }}</strong>
+          </div>
+        </article>
+      }
+    </div>
+
+    <app-task-status-chart class="kanban__chart" [stats]="stats()" />
+  }
+</section>

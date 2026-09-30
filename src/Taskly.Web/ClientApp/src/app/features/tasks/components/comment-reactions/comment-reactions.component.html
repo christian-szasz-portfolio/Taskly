@@ -1,0 +1,44 @@
+<div class="comment-reactions">
+  @if (hasReactions()) {
+    <div class="comment-reactions__list">
+      @for (group of groupedReactions(); track group.emoji) {
+        <button
+          type="button"
+          class="comment-reactions__badge"
+          [class.comment-reactions__badge--active]="group.hasCurrentUserReacted"
+          [matTooltip]="group.count + ' ' + (group.count === 1 ? 'reaction' : 'reactions')"
+          (click)="onReactionClick(group.emoji)"
+        >
+          <span class="comment-reactions__emoji">{{ group.emoji }}</span>
+          <span class="comment-reactions__count">{{ group.count }}</span>
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Add reaction button with picker menu -->
+  <button
+    type="button"
+    class="comment-reactions__add"
+    [matMenuTriggerFor]="emojiMenu"
+    matTooltip="Add reaction"
+    aria-label="Add reaction"
+  >
+    <fa-icon [icon]="emojiIcon" size="sm"></fa-icon>
+  </button>
+
+  <mat-menu #emojiMenu="matMenu" class="comment-reactions__picker">
+    <div class="comment-reactions__picker-grid" (click)="$event.stopPropagation()">
+      @for (emoji of availableEmojis; track emoji) {
+        <button
+          type="button"
+          class="comment-reactions__picker-item"
+          [attr.aria-label]="'React with ' + emoji"
+          (click)="onEmojiPick(emoji)"
+        >
+          {{ emoji }}
+        </button>
+      }
+    </div>
+  </mat-menu>
+</div>

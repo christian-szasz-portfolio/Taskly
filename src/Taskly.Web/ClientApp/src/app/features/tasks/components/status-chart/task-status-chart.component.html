@@ -1,0 +1,28 @@
+<section class="status-chart" aria-label="Task completion breakdown">
+  @if (canRenderChart()) {
+    <div class="status-chart__canvas">
+      <canvas baseChart [type]="'pie'" [data]="chartData()" [options]="chartOptions()"></canvas>
+    </div>
+  } @else {
+    <div class="status-chart__placeholder">
+      <p>Chart visible in browser builds.</p>
+    </div>
+  }
+
+  <ul class="status-chart__legend">
+    <li>
+      <span class="legend__swatch legend__swatch--completed"></span>
+      <div>
+        <p>Completed</p>
+        <strong>{{ values().completed }}%</strong>
+      </div>
+    </li>
+    <li>
+      <span class="legend__swatch legend__swatch--total"></span>
+      <div>
+        <p>Total</p>
+        <strong>{{ values().total }}</strong>
+      </div>
+    </li>
+  </ul>
+</section>

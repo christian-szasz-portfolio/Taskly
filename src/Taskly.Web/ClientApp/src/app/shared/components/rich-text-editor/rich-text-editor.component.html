@@ -1,0 +1,52 @@
+<div class="rte">
+  <div class="rte__toolbar" role="toolbar" aria-label="Formatting options">
+    @for (action of toolbar; track action.format) {
+      <button
+        mat-icon-button
+        type="button"
+        (click)="applyFormat(action.format)"
+        [attr.aria-label]="action.label"
+        [attr.aria-pressed]="isActive(action.format)"
+        [class.rte__toolbar-btn--active]="isActive(action.format)"
+        [matTooltip]="action.label"
+      >
+        <fa-icon [icon]="action.icon"></fa-icon>
+      </button>
+    }
+
+    <div class="rte__toolbar-separator"></div>
+
+    <!-- Code Block Button with Language Menu -->
+    <button
+      mat-icon-button
+      type="button"
+      aria-label="Insert code block"
+      matTooltip="Insert code block"
+      [matMenuTriggerFor]="languageMenu"
+      [class.rte__toolbar-btn--active]="isActive(FormatType.Code)"
+    >
+      <fa-icon [icon]="codeIcon"></fa-icon>
+    </button>
+
+    <mat-menu #languageMenu="matMenu" class="rte-language-menu">
+      @for (lang of supportedLanguages(); track lang.id) {
+        <button mat-menu-item (click)="insertCodeBlock(lang.id)">
+          {{ lang.label }}
+        </button>
+      }
+    </mat-menu>
+  </div>
+
+  <div
+    #editor
+    class="rte__content"
+    contenteditable="true"
+    spellcheck="true"
+    [attr.aria-label]="ariaLabel()"
+    [attr.data-placeholder]="placeholder()"
+    (input)="handleInput()"
+    (keydown)="handleKeydown($event)"
+    (paste)="handlePaste($event)"
+    (drop)="handleDrop($event)"
+  ></div>
+</div>

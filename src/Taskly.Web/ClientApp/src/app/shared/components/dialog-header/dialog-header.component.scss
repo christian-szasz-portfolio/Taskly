@@ -1,0 +1,36 @@
+// Dialog header styles are primarily defined in global styles.scss
+// This file contains only component-specific overrides if needed
+
+.dialog-header {
+  &__icon {
+    color: var(--brand-primary);
+    margin-right: 0.5rem;
+  }
+
+  &__title-text {
+    flex: 1;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+    margin-right: 0.75rem;
+
+    &:empty {
+      display: none;
+    }
+  }
+}
+
+// Support for icon-only titles (icon next to text)
+:host h2[mat-dialog-title] {
+  display: flex;
+  align-items: center;
+
+  // When titleClass is provided, allow it to override defaults
+  &:not([class=""]) {
+    gap: 0.5rem;
+  }
+}

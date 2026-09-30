@@ -1,0 +1,216 @@
+.rte {
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 0.5rem;
+  background: var(--input-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rte__toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-bottom: 1px solid var(--border-muted);
+  padding-bottom: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.rte__toolbar-separator {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-muted);
+  margin: 0 0.25rem;
+}
+
+.rte__toolbar-btn--active {
+  background-color: rgba(var(--brand-primary-rgb), 0.12);
+  color: var(--brand-primary);
+
+  &:hover {
+    background-color: rgba(var(--brand-primary-rgb), 0.18);
+  }
+}
+
+.rte__content {
+  min-height: 180px;
+  outline: none;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text-primary);
+  overflow-y: auto;
+  max-height: 400px;
+
+  // List styling
+  ul, ol {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+  }
+
+  li {
+    margin: 0.25rem 0;
+  }
+
+  // Image styling
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+    display: block;
+  }
+
+  // Code block styling
+  pre.rte-code-block {
+    position: relative;
+    margin: 1rem 0;
+    padding: 0;
+    border-radius: 8px;
+    background: var(--code-block-bg);
+    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', Consolas, Monaco, 'Courier New', monospace;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    border: 1px solid var(--overlay-light);
+
+    // Language label
+    &::before {
+      content: attr(data-language);
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--code-comment);
+      background: var(--overlay-light);
+      border-bottom-left-radius: 6px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    code {
+      display: block;
+      padding: 1rem 0;
+      padding-top: 2rem;
+      color: var(--code-text);
+      white-space: pre;
+      outline: none;
+    }
+
+    .code-line {
+      display: flex;
+      min-height: 1.6em;
+
+      &:hover {
+        background: var(--overlay-light);
+      }
+    }
+
+    .line-number {
+      flex-shrink: 0;
+      width: 3rem;
+      padding-right: 1rem;
+      text-align: right;
+      color: var(--code-comment);
+      user-select: none;
+      border-right: 1px solid var(--overlay-light);
+      margin-right: 1rem;
+    }
+
+    .line-content {
+      flex: 1;
+      padding-right: 1rem;
+    }
+
+    // Syntax highlighting tokens
+    .token {
+      &.keyword {
+        color: var(--code-keyword);
+        font-weight: 500;
+      }
+
+      &.string {
+        color: var(--code-string);
+      }
+
+      &.number {
+        color: var(--code-number);
+      }
+
+      &.comment {
+        color: var(--code-comment);
+        font-style: italic;
+      }
+
+      &.doc-comment {
+        color: var(--code-comment);
+        font-style: italic;
+      }
+
+      &.type {
+        color: var(--code-type);
+      }
+
+      &.attribute,
+      &.decorator {
+        color: var(--code-decorator);
+      }
+
+      &.property {
+        color: var(--code-property);
+      }
+
+      &.tag {
+        color: var(--code-keyword);
+      }
+
+      &.attr-name {
+        color: var(--code-property);
+      }
+
+      &.attr-value {
+        color: var(--code-string);
+      }
+
+      &.selector {
+        color: var(--code-function);
+      }
+
+      &.value {
+        color: var(--code-string);
+      }
+
+      &.function {
+        color: var(--code-function);
+      }
+
+      &.operator {
+        color: var(--code-text);
+      }
+
+      &.punctuation {
+        color: var(--code-text);
+      }
+    }
+  }
+}
+
+.rte__content:empty:before {
+  content: attr(data-placeholder);
+  color: var(--text-tertiary);
+}
+
+// Language menu styling
+::ng-deep .rte-language-menu {
+  .mat-mdc-menu-content {
+    padding: 0.25rem 0;
+  }
+
+  .mat-mdc-menu-item {
+    min-height: 36px;
+    font-size: 0.875rem;
+  }
+}

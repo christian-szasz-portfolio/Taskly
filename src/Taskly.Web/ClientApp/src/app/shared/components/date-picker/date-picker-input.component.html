@@ -1,0 +1,51 @@
+<mat-form-field appearance="outline" class="date-picker-field">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    matInput
+    type="date"
+    [attr.placeholder]="placeholder() || null"
+    [value]="inputValue()"
+    (input)="onInputChange($event)"
+    (blur)="handleBlur()"
+    [required]="required()"
+    [disabled]="disabled()"
+  />
+
+  <button
+    mat-icon-button
+    matSuffix
+    type="button"
+    class="date-picker-button"
+    [matMenuTriggerFor]="calendarMenu"
+    [disabled]="disabled()"
+    aria-label="Open calendar"
+  >
+    <fa-icon [icon]="calendarIcon()"></fa-icon>
+  </button>
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+  @if (hasManualInputError()) {
+    <mat-error>Enter a valid date.</mat-error>
+  }
+</mat-form-field>
+
+<mat-menu
+  #calendarMenu="matMenu"
+  class="date-picker-menu"
+  panelClass="date-picker-panel"
+  yPosition="below"
+  [overlapTrigger]="false"
+>
+  <div class="calendar-menu" (click)="$event.stopPropagation()" (mousedown)="$event.stopPropagation()">
+    <mat-calendar
+      [selected]="calendarValue()"
+      (selectedChange)="handleCalendarSelection($event)"
+      [headerComponent]="calendarHeader"
+    ></mat-calendar>
+    <div class="calendar-menu__actions">
+      <button mat-stroked-button type="button" (click)="clearFromMenu()">Clear date</button>
+    </div>
+  </div>
+</mat-menu>

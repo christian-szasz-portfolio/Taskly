@@ -1,0 +1,22 @@
+<div class="dialog-header">
+  <h2 mat-dialog-title [class]="titleClass()">
+    @if (icon()) {
+      <fa-icon [icon]="icon()!" class="dialog-header__icon" aria-hidden="true"></fa-icon>
+    }
+    <span class="dialog-header__title-text">{{ title() }}</span>
+    <ng-content select="[dialogTitleSuffix]"></ng-content>
+  </h2>
+  <div class="dialog-header__actions">
+    <ng-content select="[headerActions]"></ng-content>
+  </div>
+  @if (showCloseButton()) {
+    <button
+      type="button"
+      class="dialog-close-btn"
+      (click)="onClose()"
+      matTooltip="Close"
+      aria-label="Close dialog">
+      <fa-icon [icon]="closeIcon"></fa-icon>
+    </button>
+  }
+</div>

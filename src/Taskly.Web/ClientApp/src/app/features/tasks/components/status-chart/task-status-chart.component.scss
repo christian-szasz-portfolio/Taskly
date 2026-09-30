@@ -1,0 +1,92 @@
+.status-chart {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.status-chart__canvas {
+  width: 240px;
+  height: 240px;
+}
+
+.status-chart__legend {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0.75rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.status-chart__legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--hero-overlay);
+  color: var(--text-on-brand);
+  border: 1px solid var(--hero-border);
+}
+
+.status-chart__legend p {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.status-chart__legend strong {
+  font-size: 1.1rem;
+}
+
+.legend__swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend__swatch--open {
+  background: var(--accent-emerald);
+}
+
+.legend__swatch--todo {
+  background: var(--accent-sky);
+}
+
+.legend__swatch--inprogress {
+  background: var(--accent-amber);
+}
+
+.legend__swatch--testing {
+  background: var(--accent-purple);
+}
+
+.legend__swatch--completed {
+  background: var(--brand-primary);
+}
+
+.legend__swatch--total {
+  background: var(--status-neutral);
+}
+
+.status-chart__placeholder {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+@media (max-width: 640px) {
+  .status-chart__canvas {
+    width: 180px;
+    height: 180px;
+  }
+
+  .status-chart__legend {
+    flex-direction: column;
+  }
+}

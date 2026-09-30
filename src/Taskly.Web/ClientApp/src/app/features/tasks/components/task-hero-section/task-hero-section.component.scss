@@ -1,0 +1,169 @@
+.kanban__hero {
+	background: linear-gradient(135deg, rgba(var(--brand-primary-rgb), 0.95), rgba(var(--brand-accent-rgb), 0.9));
+	border-radius: 1.5rem;
+	padding: 2rem;
+	color: var(--text-on-brand);
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 2rem;
+	box-shadow: none;
+	transition: padding 0.2s ease;
+}
+
+.kanban__hero--collapsed {
+	grid-template-columns: minmax(260px, 1fr);
+	padding-bottom: 1.5rem;
+}
+
+.hero__copy {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.hero__title-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.hero__collapse-btn {
+	background: var(--hero-overlay);
+	color: var(--text-on-brand);
+	border-radius: 50%;
+	transition: transform 0.2s ease, background 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		background: var(--hero-overlay-hover);
+	}
+}
+
+.hero__eyebrow {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 0.85rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	opacity: 0.9;
+}
+
+.hero__eyebrow fa-icon {
+	font-size: 1rem;
+}
+
+.hero__copy h1 {
+	margin: 0;
+	font-size: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.hero__body {
+	margin: 0;
+	max-width: 480px;
+	color: var(--hero-text-muted);
+}
+
+.hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	align-items: center;
+}
+
+.hero__icon-btn {
+	background: var(--hero-overlay-hover);
+	color: var(--text-on-brand);
+	border-radius: 999px;
+	width: 44px;
+	height: 44px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	box-shadow: var(--shadow-md);
+	transition: transform 0.2s ease, background 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+	}
+
+	&--disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+
+		&:hover {
+			transform: none;
+		}
+	}
+}
+
+.hero__icon-btn fa-icon {
+	position: relative;
+  top: 3.5px;
+}
+
+.hero__refresh-btn {
+	@extend .hero__icon-btn;
+	border: 1px solid var(--hero-border-strong);
+	background: var(--overlay-light);
+	box-shadow: var(--shadow-md);
+
+	&:hover {
+		background: var(--overlay-light-strong);
+	}
+}
+
+.hero__panel {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	gap: 1rem;
+}
+
+.kanban__chart {
+	background: var(--hero-overlay);
+	border-radius: 1rem;
+	padding: 0.5rem;
+	border: 1px solid var(--hero-border);
+	display: flex;
+	justify-content: center;
+}
+
+.kanban__hero--collapsed .hero__panel,
+.kanban__hero--collapsed .kanban__chart {
+	display: none;
+}
+
+.hero-card {
+	background: var(--hero-overlay);
+	border-radius: 1rem;
+	padding: 1.25rem;
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	border: 1px solid var(--hero-border);
+}
+
+.hero-card fa-icon {
+	font-size: 1.4rem;
+}
+
+.hero-card p {
+	margin: 0;
+	font-size: 0.9rem;
+	opacity: 0.8;
+}
+
+.hero-card strong {
+	display: block;
+	font-size: 1.5rem;
+	margin-top: 0.2rem;
+}
+
+@media (max-width: 720px) {
+	.hero__actions {
+		flex-direction: column;
+		align-items: stretch;
+	}
+}

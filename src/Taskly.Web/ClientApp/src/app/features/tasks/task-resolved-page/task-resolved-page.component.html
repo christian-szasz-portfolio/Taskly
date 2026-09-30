@@ -1,0 +1,27 @@
+<app-task-catalog-page
+  eyebrow="Resolved items"
+  title="Completed and closed"
+  description="Items that have been completed and closed. Reopen them to bring them back to the kanban board's Done column."
+  [theme]="CatalogTheme.Amber"
+  [isEmpty]="isEmpty()"
+  emptyTitle="No resolved items yet."
+  emptyHint="When you close items from the Done column, they will appear here."
+  [boardRoute]="boardRoute()"
+  (refreshed)="refresh()"
+>
+  @for (item of resolvedItems(); track item.id) {
+    <app-expandable-card
+      [cardKey]="item.issueKey"
+      [persistenceKey]="item.issueKey ?? item.id"
+      [title]="item.title"
+      [theme]="CardTheme.Amber"
+      [hasDetails]="hasItemDetails(item)"
+      [defaultExpanded]="false"
+      [primaryAction]="reopenAction()"
+      (opened)="openItem(item)"
+      (primaryActionClicked)="reopenOnBoard(item)"
+    >
+      <app-task-card-details [task]="item" />
+    </app-expandable-card>
+  }
+</app-task-catalog-page>

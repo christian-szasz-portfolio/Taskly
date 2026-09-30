@@ -1,0 +1,274 @@
+<form
+  class="task-editor-form"
+  [attr.id]="formId()"
+  (submit)="submit($event)"
+  [attr.mat-dialog-content]="isDialogAppearance() ? '' : null"
+>
+  <fieldset class="editor-section">
+    <legend>General info</legend>
+    <div class="section-grid general-info-grid">
+      <mat-form-field appearance="outline" class="title-field">
+        <mat-label>Title</mat-label>
+        <input matInput [formField]="taskForm.title" />
+        <mat-hint align="end">{{ taskForm.title().value().length }}/120</mat-hint>
+        @if (hasError(taskForm.title, 'required')) {
+          <mat-error>Title is required.</mat-error>
+        }
+      </mat-form-field>
+      <app-date-picker-input
+        class="full-width general-info-grid__date"
+        [formField]="taskForm.dueAtUtc"
+        label="Due date"
+        hint="Leave blank to keep unscheduled."
+      ></app-date-picker-input>
+    </div>
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>Details</legend>
+    <div class="section-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Issue Type</mat-label>
+        <mat-select [value]="taskForm.issueType().value()" (selectionChange)="handleIssueTypeChange($event)">
+          <mat-select-trigger>
+            @if (selectedIssueTypeOption()) {
+              <span class="issue-type-option">
+                <fa-icon
+                  class="issue-type-option__icon"
+                  [icon]="selectedIssueTypeOption()?.icon"
+                  [style.color]="selectedIssueTypeOption()?.color"
+                ></fa-icon>
+                <span>{{ selectedIssueTypeOption()?.label }}</span>
+              </span>
+            }
+          </mat-select-trigger>
+          @for (option of issueTypeOptions(); track option.value) {
+            <mat-option [value]="option.value">
+              <span class="issue-type-option">
+                <fa-icon
+                  class="issue-type-option__icon"
+                  [icon]="option.icon"
+                  [style.color]="option.color"
+                ></fa-icon>
+                <span>{{ option.label }}</span>
+              </span>
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select [value]="taskForm.priority().value()" (selectionChange)="handlePriorityChange($event)">
+          @for (option of priorityOptions(); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Pick the urgency that best matches.</mat-hint>
+      </mat-form-field>
+
+      @if (showResolutionField()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Resolution</mat-label>
+          <mat-select [value]="taskForm.resolution().value()" (selectionChange)="handleResolutionChange($event)">
+            <mat-select-trigger>
+              @if (selectedResolutionOption()) {
+                <span class="resolution-option">
+                  <fa-icon
+                    class="resolution-option__icon"
+                    [icon]="selectedResolutionOption()?.icon"
+                    [style.color]="selectedResolutionOption()?.color"
+                  ></fa-icon>
+                  <span>{{ selectedResolutionOption()?.label }}</span>
+                </span>
+              }
+            </mat-select-trigger>
+            @for (option of resolutionOptions(); track option.value) {
+              <mat-option [value]="option.value">
+                <span class="resolution-option">
+                  <fa-icon
+                    class="resolution-option__icon"
+                    [icon]="option.icon"
+                    [style.color]="option.color"
+                  ></fa-icon>
+                  <span>{{ option.label }}</span>
+                </span>
+              </mat-option>
+            }
+          </mat-select>
+          <mat-hint>Set to Closed to move item to resolved list.</mat-hint>
+        </mat-form-field>
+      }
+    </div>
+
+    @if (isEpicIssueType()) {
+      <p class="epic-note">Epics own their scope, so components, labels, and parent epic references are disabled.</p>
+    } @else {
+      @if (componentComboOptions().length > 0) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Components</mat-label>
+          <mat-select multiple [value]="taskForm.components().value()" (selectionChange)="handleComponentsChange($event)">
+            @for (option of componentComboOptions(); track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Select from project-defined components.</mat-hint>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Components</mat-label>
+          <mat-chip-grid #componentGrid aria-label="Components">
+            @for (component of taskForm.components().value(); track component + '-' + $index) {
+              <mat-chip-row [removable]="true" (removed)="removeComponentChip(component)">
+                {{ component }}
+                <button matChipRemove type="button" aria-label="Remove component">
+                  <fa-icon [icon]="icons().close" class="chip-remove-icon"></fa-icon>
+                </button>
+              </mat-chip-row>
+            }
+            <input
+              matInput
+              placeholder="Add component"
+              [matChipInputFor]="componentGrid"
+              [matChipInputSeparatorKeyCodes]="chipSeparatorKeys"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addComponentChip($event)"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+      }
+
+      @if (labelComboOptions().length > 0) {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Labels</mat-label>
+          <mat-select multiple [value]="taskForm.labels().value()" (selectionChange)="handleLabelsChange($event)">
+            @for (option of labelComboOptions(); track option.value) {
+              <mat-option [value]="option.value">{{ option.label }}</mat-option>
+            }
+          </mat-select>
+          <mat-hint>Select from project-defined labels.</mat-hint>
+        </mat-form-field>
+      } @else {
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Labels</mat-label>
+          <mat-chip-grid #labelGrid aria-label="Labels">
+            @for (label of taskForm.labels().value(); track label + '-' + $index) {
+              <mat-chip-row [removable]="true" (removed)="removeLabelChip(label)">
+                {{ label }}
+                <button matChipRemove type="button" aria-label="Remove label">
+                  <fa-icon [icon]="icons().close" class="chip-remove-icon"></fa-icon>
+                </button>
+              </mat-chip-row>
+            }
+            <input
+              matInput
+              placeholder="Add label"
+              [matChipInputFor]="labelGrid"
+              [matChipInputSeparatorKeyCodes]="chipSeparatorKeys"
+              [matChipInputAddOnBlur]="true"
+              (matChipInputTokenEnd)="addLabelChip($event)"
+            />
+          </mat-chip-grid>
+        </mat-form-field>
+      }
+
+      <div class="section-grid">
+        <app-combo-box
+          label="Epic"
+          placeholder="e.g., WEB-1203"
+          [appearance]="'outline'"
+          [field]="taskForm.epicKey"
+          [options]="epicComboOptions()"
+          [maxLength]="100"
+          hint="Select an existing epic or type a new key."
+        ></app-combo-box>
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>People</legend>
+    @if (isEpicIssueType()) {
+      <div class="epic-note">
+        Epics are owned by {{ epicOwnerLabel }}, so assignee and reporter fields are managed automatically.
+      </div>
+    } @else {
+      <div class="section-grid">
+        <app-combo-box
+          label="Assignee"
+          placeholder="Search or type a teammate"
+          [appearance]="'outline'"
+          [field]="taskForm.assignedTo"
+          [options]="userComboOptions()"
+          [maxLength]="256"
+          [showError]="hasError(taskForm.assignedTo, 'required')"
+          errorText="Assignee is required."
+        ></app-combo-box>
+        <app-combo-box
+          label="Reporter"
+          placeholder="Search or type the reporter"
+          [appearance]="'outline'"
+          [field]="taskForm.reporter"
+          [options]="userComboOptions()"
+          [maxLength]="256"
+        ></app-combo-box>
+      </div>
+    }
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>Relationships</legend>
+    @if (isEpicIssueType()) {
+      <div class="epic-note">Epics cannot be linked to other task items.</div>
+    } @else {
+      <app-combo-box
+        label="Is Linked To"
+        placeholder="Search by key or title"
+        [appearance]="'outline'"
+        [field]="taskForm.linkedTaskId"
+        [options]="linkedTaskComboOptions()"
+        hint="Link this task to a related task item."
+      ></app-combo-box>
+    }
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>Description</legend>
+    <app-rich-text-editor
+      class="rich-editor"
+      ariaLabel="Task description"
+      [value]="taskForm.description().value()"
+      (valueChange)="handleDescriptionChange($event)"
+    ></app-rich-text-editor>
+    <div class="description-hint">{{ descriptionLength() }}/4096 characters</div>
+  </fieldset>
+
+  @if (currentTaskId()) {
+    <fieldset class="editor-section">
+      <legend>
+        <fa-icon [icon]="icons().attachments" class="legend-icon"></fa-icon>
+        Attachments
+      </legend>
+      <app-file-attachment-list
+        [editable]="true"
+      ></app-file-attachment-list>
+    </fieldset>
+  }
+
+  <div
+    class="task-editor-form__actions"
+    [attr.mat-dialog-actions]="isDialogAppearance() ? '' : null"
+    align="end"
+  >
+    <button mat-button type="button" (click)="cancel()" [disabled]="saving()">
+      {{ cancelLabel() }}
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="taskForm().invalid() || saving()"
+    >
+      {{ saving() ? 'Saving...' : submitLabel() }}
+    </button>
+  </div>
+</form>

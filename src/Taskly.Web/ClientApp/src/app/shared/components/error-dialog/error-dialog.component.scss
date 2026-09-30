@@ -1,0 +1,42 @@
+.error-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  align-self: center;
+  padding-top: 24px;
+}
+
+.error-icon {
+  color: var(--status-error);
+  font-size: 3rem;
+}
+
+mat-dialog-content {
+  min-width: 480px;
+  max-width: 560px;
+  min-height: 120px;
+}
+
+.section-heading {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: var(--text-primary);
+}
+
+.error-exception {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+}
+
+.error-description {
+  margin: 0 0 1rem 0;
+  color: var(--text-secondary);
+}
+
+.error-question {
+  font-weight: 500;
+  text-align: center;
+  margin-top: 1.5rem;
+}

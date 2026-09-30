@@ -1,0 +1,86 @@
+<div
+  class="kanban-column"
+  [style.height.px]="columnHeight() ?? undefined"
+  [style.min-height.px]="columnHeight() ?? undefined"
+>
+  <div class="column__header">
+    <div>
+      <p class="column__eyebrow">{{ column().subtitle }}</p>
+      <h2>{{ column().title }}</h2>
+    </div>
+    <div class="column__count" aria-label="Cards in {{ column().title }}">{{ column().items.length }}</div>
+  </div>
+
+  <section class="column__cards" cdkDropList [cdkDropListData]="column().items" (cdkDropListDropped)="onDrop($event)">
+    @for (item of column().items; track trackByTaskId($index, item)) {
+      <article
+        class="kanban-card"
+        [class.kanban-card--subtask-done]="isSubtaskDone(item)"
+        [class.kanban-card--drag-disabled]="!canWrite()"
+        [attr.data-accent]="column().accent"
+        cdkDrag
+        [cdkDragData]="item"
+        [cdkDragDisabled]="!canWrite()"
+        (click)="onCardSelected(item, $event)"
+      >
+        <div class="card__header">
+          @if (isSubtask(item)) {
+            <span class="card__issue-key" [class.card__issue-key--done]="isSubtaskDone(item)">{{ getSubtaskDisplayKey(item) }}</span>
+          } @else if (item.issueKey) {
+            <span class="card__issue-key">{{ item.issueKey }}</span>
+          }
+          @if (getFormattedTimeSpent(item)) {
+            <span class="card__time-spent">{{ getFormattedTimeSpent(item) }}</span>
+          }
+        </div>
+
+        <div class="card__body">
+          <h3 class="card__title" [class.card__title--done]="isSubtaskDone(item)">{{ item.title }}</h3>
+
+          @if (item.labels.length > 0) {
+            <mat-chip-set class="card__labels" aria-label="Labels">
+              @for (label of item.labels.slice(0, 2); track label) {
+                <mat-chip [ngStyle]="helpers().labelChipStyle(label)">{{ label }}</mat-chip>
+              }
+              @if (item.labels.length > 2) {
+                <mat-chip class="chip--more">+{{ item.labels.length - 2 }}</mat-chip>
+              }
+            </mat-chip-set>
+          }
+
+          @if (item.components.length > 0) {
+            <div class="card__components" aria-label="Components">
+              @for (component of item.components; track component + '-' + $index) {
+                <p class="card__component">
+                  <fa-icon [icon]="addCardIcon()" class="card__component-icon"></fa-icon>
+                  {{ component }}
+                </p>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="card__footer">
+          <div class="card__footer-row">
+            <span class="card__status" [attr.data-status]="item.status">
+              <fa-icon [icon]="helpers().statusIcon(item.status)"></fa-icon>
+              {{ helpers().statusToken(item.status) }}
+            </span>
+          </div>
+          <div class="card__footer-row">
+            <span class="card__type">
+              <fa-icon [icon]="getIssueTypeIcon(item)"></fa-icon>
+              {{ getIssueTypeDisplay(item) }}
+            </span>
+          </div>
+          <div class="card__footer-row">
+            <span class="card__priority" [attr.data-priority]="item.priority">
+              <fa-icon [icon]="helpers().priorityIcon(item.priority)"></fa-icon>
+              {{ helpers().priorityToken(item.priority) }}
+            </span>
+          </div>
+        </div>
+      </article>
+    }
+  </section>
+</div>

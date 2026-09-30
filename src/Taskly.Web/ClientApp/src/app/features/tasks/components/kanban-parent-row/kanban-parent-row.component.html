@@ -1,0 +1,70 @@
+<div class="kanban__row" [class.kanban__row--collapsed]="!isExpanded()">
+  <!-- Row Header -->
+  <div class="kanban__row-header" (click)="onToggleExpansion()">
+    <button class="kanban__row-toggle" type="button" aria-label="Toggle row">
+      <fa-icon [icon]="isExpanded() ? chevronDown() : chevronRight()" />
+    </button>
+    <div class="kanban__row-title">
+      <span class="kanban__row-key">{{ parentKey() }}</span>
+      <span class="kanban__row-name">{{ parent().title }}</span>
+    </div>
+    <div class="kanban__row-actions">
+      @if (allSubtasksDone()) {
+        <button
+          type="button"
+          class="kanban__row-action-btn kanban__row-action-btn--resolve"
+          [class.kanban__row-action-btn--disabled]="!canWrite()"
+          [disabled]="!canWrite()"
+          [matTooltip]="resolveTooltip()"
+          [attr.aria-label]="resolveTooltip()"
+          (click)="onResolveParent($event)"
+        >
+          <fa-icon [icon]="resolveIcon()" />
+        </button>
+      }
+      <button
+        type="button"
+        class="kanban__row-action-btn"
+        (click)="onOpenParentPanel($event)"
+        matTooltip="View in side panel"
+        aria-label="View in side panel"
+      >
+        <fa-icon [icon]="viewIcon()" />
+      </button>
+      <a
+        class="kanban__row-action-btn"
+        [routerLink]="parentDetailRoute()"
+        target="_blank"
+        (click)="$event.stopPropagation()"
+        matTooltip="Open in new tab"
+        aria-label="Open in new tab"
+      >
+        <fa-icon [icon]="externalLinkIcon()" />
+      </a>
+      <span class="kanban__row-badge">{{ subtaskCount() }} subtask{{ subtaskCount() === 1 ? '' : 's' }}</span>
+    </div>
+  </div>
+
+  <!-- Row Content (Columns) -->
+  @if (isExpanded()) {
+    <div class="kanban__row-columns" [class.kanban__row-columns--resizing]="isResizing()">
+      @for (column of columns(); track column.status) {
+        <app-task-column
+          [column]="column"
+          [helpers]="helpers()"
+          [addCardIcon]="addCardIcon()"
+          [columnHeight]="rowColumnHeight()"
+          [canWrite]="canWrite()"
+          (cardDropped)="onCardDropped($event)"
+          (cardSelected)="onCardSelected($event)"
+        />
+      }
+
+      @if (isResizing()) {
+        <div class="kanban__row-loading-overlay">
+          <div class="kanban__row-spinner"></div>
+        </div>
+      }
+    </div>
+  }
+</div>

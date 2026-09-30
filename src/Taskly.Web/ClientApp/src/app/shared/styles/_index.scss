@@ -1,0 +1,10 @@
+// =============================================================================
+// Shared Styles Barrel Export
+// =============================================================================
+// Import all shared styles with: @use 'app/shared/styles' as shared;
+// Or import specific modules:
+//   @use 'app/shared/styles/mixins' as mixins;
+//   @use 'app/shared/styles/forms';
+
+@forward 'mixins';
+@forward 'forms';

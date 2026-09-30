@@ -1,0 +1,94 @@
+@let selectedTask = task();
+@let subtask = isSubtask();
+
+@if (selectedTask) {
+  <aside
+    class="detail-panel"
+    [style.height.px]="panelHeight() ?? null"
+    [style.max-height.px]="panelHeight() ?? null"
+  >
+    <div class="detail-panel__resize-handle" (mousedown)="startResize.emit($event)">
+      <fa-icon [icon]="panelIcons().gripLines" class="resize-handle__icon"></fa-icon>
+    </div>
+
+    <header class="detail-panel__header">
+      <div class="detail-panel__title-row">
+        @if (selectedTask.issueKey) {
+          @if (subtask) {
+            <span class="detail-panel__issue-key detail-panel__issue-key--subtask">
+              {{ selectedTask.issueKey }}
+            </span>
+          } @else {
+            <a
+              class="detail-panel__issue-key"
+              [href]="detailUrl(selectedTask)"
+              target="_blank"
+              rel="noreferrer noopener"
+              title="Open in new tab"
+            >
+              {{ selectedTask.issueKey }}
+              <fa-icon [icon]="panelIcons().externalLink" class="detail-panel__link-icon"></fa-icon>
+            </a>
+          }
+        }
+        <span [matTooltip]="editTooltip()">
+          <button
+            mat-icon-button
+            class="detail-panel__edit-btn"
+            [class.detail-panel__edit-btn--disabled]="!canWrite()"
+            [disabled]="!canWrite()"
+            (click)="onEdit(selectedTask)"
+          >
+            <fa-icon [icon]="panelIcons().edit"></fa-icon>
+          </button>
+        </span>
+        @if (canHaveSubtasks()) {
+          <span [matTooltip]="createSubtaskDisabledNote">
+            <button
+              mat-icon-button
+              class="detail-panel__subtask-btn detail-panel__subtask-btn--disabled"
+              aria-label="Create subtask"
+              disabled
+            >
+              <fa-icon [icon]="panelIcons().addSubtask"></fa-icon>
+            </button>
+          </span>
+        }
+        <button mat-icon-button class="detail-panel__close-btn" (click)="closePanel.emit()" matTooltip="Close panel">
+          <fa-icon [icon]="panelIcons().close"></fa-icon>
+        </button>
+      </div>
+      <h2 class="detail-panel__title">
+        @if (subtask) {
+          <span class="detail-panel__title-text">{{ selectedTask.title }}</span>
+        } @else {
+          <a
+            [href]="detailUrl(selectedTask)"
+            target="_blank"
+            rel="noreferrer noopener"
+            class="detail-panel__title-link"
+            title="Open in new tab"
+          >
+            {{ selectedTask.title }}
+          </a>
+        }
+      </h2>
+    </header>
+
+    <section class="detail-panel__content">
+      <app-task-summary-cards
+        class="detail-panel__summary"
+        [task]="selectedTask"
+        [helpers]="helpers()"
+      ></app-task-summary-cards>
+
+      <app-task-detail-sections
+        class="detail-panel__sections"
+        [task]="selectedTask"
+        [helpers]="helpers()"
+        [sectionIcons]="sectionIcons()"
+      ></app-task-detail-sections>
+    </section>
+
+  </aside>
+}

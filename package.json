@@ -1,0 +1,21 @@
+{
+  "name": "taskly-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix src/Taskly.Web/ClientApp",
+    "dev:build": "npm run dev:build --prefix src/Taskly.Web/ClientApp",
+    "dev:watch": "npm run dev:watch --prefix src/Taskly.Web/ClientApp",
+    "build": "npm run build --prefix src/Taskly.Web/ClientApp",
+    "preview": "npm run preview --prefix src/Taskly.Web/ClientApp",
+    "lint": "npm run lint --prefix src/Taskly.Web/ClientApp",
+    "lint:fix": "npm run lint:fix --prefix src/Taskly.Web/ClientApp",
+    "test": "npm run test --prefix src/Taskly.Web/ClientApp",
+    "test:watch": "npm run test:watch --prefix src/Taskly.Web/ClientApp",
+    "test:coverage": "npm run test:coverage --prefix src/Taskly.Web/ClientApp",
+    "ci": "npm run ci --prefix src/Taskly.Web/ClientApp",
+    "install:client": "npm install --prefix src/Taskly.Web/ClientApp",
+    "clean:windows": "if exist src\\Taskly.Web\\ClientApp\\node_modules rmdir /s /q src\\Taskly.Web\\ClientApp\\node_modules",
+    "clean:unix": "rm -rf src/Taskly.Web/ClientApp/node_modules"
+  }
+}

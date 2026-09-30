@@ -1,0 +1,96 @@
+<app-maintenance-page-layout
+  title="System Tasks"
+  description="View and filter your activity history and system operations."
+  heroVariant="slate"
+  [loading]="loading()"
+  [error]="error()"
+  [isEmpty]="isEmpty()"
+  emptyMessage="No system tasks found."
+  [filtersVisible]="filtersVisible()"
+  [hasActiveFilters]="hasActiveFilters()"
+  [pageIndex]="pageIndex()"
+  [pageSize]="pageSize()"
+  [totalItems]="totalItems()"
+  [filtersTemplate]="filtersRef"
+  [tableTemplate]="tableRef"
+  [emptyIconTemplate]="emptyIconRef"
+  (refreshClick)="refresh()"
+  (toggleFiltersClick)="toggleFilters()"
+  (clearFiltersClick)="clearFilters()"
+  (pageChange)="onPageChange($event)"
+>
+</app-maintenance-page-layout>
+
+<!-- Filter Fields Template -->
+<ng-template #filtersRef>
+  <app-date-picker-input
+    label="From Date"
+    placeholder="YYYY-MM-DD"
+    [ngModel]="fromDate()"
+    (ngModelChange)="fromDate.set($event)"
+  ></app-date-picker-input>
+
+  <app-date-picker-input
+    label="To Date"
+    placeholder="YYYY-MM-DD"
+    [ngModel]="toDate()"
+    (ngModelChange)="toDate.set($event)"
+  ></app-date-picker-input>
+
+  <mat-form-field appearance="outline">
+    <mat-label>State</mat-label>
+    <mat-select [value]="stateFilter()" (selectionChange)="stateFilter.set($event.value)">
+      @for (option of stateOptions; track option.label) {
+        <mat-option [value]="option.value">{{ option.label }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Search</mat-label>
+    <input
+      matInput
+      type="text"
+      placeholder="Search by name..."
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)"
+    />
+    <fa-icon matSuffix [icon]="icons.search"></fa-icon>
+  </mat-form-field>
+</ng-template>
+
+<!-- Table Template -->
+<ng-template #tableRef>
+  <table class="maintenance-page__table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>State</th>
+        <th>Created</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (task of tasks(); track task.id) {
+        <tr>
+          <td class="cell-name">{{ task.name }}</td>
+          <td class="cell-description">{{ task.description ?? '—' }}</td>
+          <td>
+            <span class="state-badge" [class]="getStateClass(task.state)">
+              <fa-icon [icon]="getStateIcon(task.state)"></fa-icon>
+              {{ task.state }}
+            </span>
+          </td>
+          <td>{{ task.createdAtUtc | date:'dd.MM.yyyy HH:mm:ss' : 'UTC' }} UTC</td>
+          <td>{{ task.completedAtUtc ? (task.completedAtUtc | date:'dd.MM.yyyy HH:mm:ss' : 'UTC') + ' UTC' : '—' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</ng-template>
+
+<!-- Empty Icon Template -->
+<ng-template #emptyIconRef>
+  <fa-icon [icon]="icons.header"></fa-icon>
+</ng-template>

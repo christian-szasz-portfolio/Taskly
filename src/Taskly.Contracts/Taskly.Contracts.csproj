@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<PackageId>Taskly.Contracts</PackageId>
+	<Authors>sarissian08</Authors>
+	<Owners>sarissian08</Owners>
+	<OutputType>Library</OutputType>
+	<Description>The Taskly Contracts Project.</Description>
+	<Copyright>Copyright 2025. All rights reserved.</Copyright>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<PublishableProject>false</PublishableProject>
+	<BaseOutputPath>$(SolutionDir)build\</BaseOutputPath>
+	<InvariantGlobalization>false</InvariantGlobalization>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+	<AppDIInstalledThroughContent>true</AppDIInstalledThroughContent>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Update="Serilog.Sinks.Console" Version="6.1.1" />
+  </ItemGroup>
+
+</Project>

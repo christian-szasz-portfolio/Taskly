@@ -1,0 +1,330 @@
+// Skeleton loader component styles
+// Uses CSS custom properties from styles.scss for dark mode support
+
+// Shimmer animation keyframes
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  width: 100%;
+
+  // Base skeleton element mixin
+  %skeleton-base {
+    background: linear-gradient(
+      90deg,
+      var(--surface-muted) 25%,
+      var(--hover-overlay) 50%,
+      var(--surface-muted) 75%
+    );
+    background-size: 200% 100%;
+    border-radius: 4px;
+  }
+
+  &--animated {
+    %skeleton-base,
+    .skeleton__line,
+    .skeleton__title,
+    .skeleton__avatar,
+    .skeleton__cell,
+    .skeleton__header-cell,
+    .skeleton__tag,
+    .skeleton__badge,
+    .skeleton__button,
+    .skeleton__input {
+      animation: shimmer 1.5s ease-in-out infinite;
+    }
+  }
+
+  // Basic line skeleton
+  &__line {
+    @extend %skeleton-base;
+    height: 1rem;
+    width: 100%;
+    margin-bottom: 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &--short {
+      width: 50%;
+    }
+
+    &--xs {
+      width: 30%;
+      height: 0.75rem;
+    }
+  }
+
+  // Title skeleton
+  &__title {
+    @extend %skeleton-base;
+    height: 2rem;
+    width: 60%;
+    margin-bottom: 1rem;
+  }
+
+  // Text block (multiple lines)
+  &__text-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  // Avatar skeleton
+  &__avatar {
+    @extend %skeleton-base;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--small {
+      width: 2rem;
+      height: 2rem;
+    }
+
+    &--xs {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  // Card skeleton
+  &__card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-muted);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  &__card-header-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  &__card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  // Table skeleton
+  &__table {
+    width: 100%;
+    border: 1px solid var(--border-muted);
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface-card);
+  }
+
+  &__table-header {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--surface-muted);
+    border-bottom: 1px solid var(--border-muted);
+  }
+
+  &__header-cell {
+    @extend %skeleton-base;
+    flex: 1;
+    height: 1rem;
+  }
+
+  &__table-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__table-row {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-subtle);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__cell {
+    @extend %skeleton-base;
+    flex: 1;
+    height: 1rem;
+  }
+
+  // Kanban card skeleton
+  &__kanban-card {
+    background: var(--surface-card);
+    border: 1px solid var(--border-muted);
+    border-radius: 8px;
+    padding: 0.875rem;
+    margin-bottom: 0.75rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__kanban-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  &__tag {
+    @extend %skeleton-base;
+    width: 3rem;
+    height: 1.25rem;
+    border-radius: 4px;
+  }
+
+  // Kanban column skeleton
+  &__kanban-column {
+    background: var(--kanban-column-bg);
+    border: 1px solid var(--border-muted);
+    border-radius: 12px;
+    padding: 1rem;
+    min-width: 280px;
+  }
+
+  &__kanban-column-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  &__badge {
+    @extend %skeleton-base;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+  }
+
+  // Detail page skeleton
+  &__detail-page {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-muted);
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  &__detail-content {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__detail-section {
+    margin-bottom: 1.5rem;
+  }
+
+  &__detail-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__detail-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  // Form skeleton
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  &__input {
+    @extend %skeleton-base;
+    height: 2.5rem;
+    width: 100%;
+    border-radius: 6px;
+  }
+
+  &__form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  &__button {
+    @extend %skeleton-base;
+    width: 6rem;
+    height: 2.25rem;
+    border-radius: 6px;
+
+    &--outline {
+      background: transparent;
+      border: 1px solid var(--border-muted);
+    }
+  }
+
+  // List item skeleton
+  &__list-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-subtle);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__list-item-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+}

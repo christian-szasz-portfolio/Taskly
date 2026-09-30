@@ -1,0 +1,32 @@
+<div class="calendar-header">
+  <button mat-icon-button type="button" (click)="addMonths(-1)" aria-label="Previous month" matTooltip="Previous month">
+    <fa-icon [icon]="chevronLeft()" class="calendar-header__nav-icon"></fa-icon>
+  </button>
+  <div class="calendar-header__selectors">
+    <mat-select
+      class="calendar-header__select"
+      [value]="activeMonth()"
+      (selectionChange)="setMonth($event.value)"
+      aria-label="Month"
+      hideSingleSelectionIndicator
+    >
+      @for (month of monthNames(); track month; let idx = $index) {
+        <mat-option [value]="idx">{{ month }}</mat-option>
+      }
+    </mat-select>
+    <mat-select
+      class="calendar-header__select"
+      [value]="activeYear()"
+      (selectionChange)="setYear($event.value)"
+      aria-label="Year"
+      hideSingleSelectionIndicator
+    >
+      @for (year of yearOptions(); track year) {
+        <mat-option [value]="year">{{ year }}</mat-option>
+      }
+    </mat-select>
+  </div>
+  <button mat-icon-button type="button" (click)="addMonths(1)" aria-label="Next month" matTooltip="Next month">
+    <fa-icon [icon]="chevronRight()" class="calendar-header__nav-icon"></fa-icon>
+  </button>
+</div>

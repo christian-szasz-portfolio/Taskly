@@ -1,0 +1,13 @@
+<app-dialog-header
+  [title]="dialogTitle"
+  (closeClick)="handleCancel()" />
+
+<app-subtask-editor-form
+  appearance="dialog"
+  formId="subtask-editor-dialog-form"
+  [subtask]="data.subtask"
+  [availableLabels]="data.availableLabels ?? []"
+  [availableComponents]="data.availableComponents ?? []"
+  (submitted)="handleSubmit($event)"
+  (cancelled)="handleCancel()"
+></app-subtask-editor-form>

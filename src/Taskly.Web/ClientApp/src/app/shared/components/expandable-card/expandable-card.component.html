@@ -1,0 +1,74 @@
+<article class="expandable-card" [class.expandable-card--expanded]="isExpanded()" [class]="'expandable-card--' + theme()">
+  <div class="expandable-card__header" (click)="toggleExpanded($event)">
+    <div class="expandable-card__primary">
+      <span class="expandable-card__key" [class]="'expandable-card__key--' + theme()">{{ displayKey() }}</span>
+      <h3 class="expandable-card__title">{{ title() }}</h3>
+    </div>
+    <div class="expandable-card__actions">
+      @if (secondaryAction(); as action) {
+        <span [matTooltip]="action.disabled ? (action.disabledTooltip ?? action.tooltip ?? action.label) : (action.tooltip ?? action.label)">
+          <button
+            mat-icon-button
+            type="button"
+            class="expandable-card__action"
+            [class]="'expandable-card__action--' + (action.accent ?? 'slate')"
+            [class.expandable-card__action--disabled]="action.disabled"
+            [attr.aria-label]="action.label"
+            [attr.aria-disabled]="action.disabled || null"
+            [disabled]="action.disabled"
+            (click)="handleSecondaryAction($event)"
+          >
+            <fa-icon [icon]="action.icon"></fa-icon>
+          </button>
+        </span>
+      }
+      @if (primaryAction(); as action) {
+        <span [matTooltip]="action.disabled ? (action.disabledTooltip ?? action.tooltip ?? action.label) : (action.tooltip ?? action.label)">
+          <button
+            mat-icon-button
+            type="button"
+            class="expandable-card__action"
+            [class]="'expandable-card__action--' + (action.accent ?? 'emerald')"
+            [class.expandable-card__action--disabled]="action.disabled"
+            [attr.aria-label]="action.label"
+            [attr.aria-disabled]="action.disabled || null"
+            [disabled]="action.disabled"
+            (click)="handlePrimaryAction($event)"
+          >
+            <fa-icon [icon]="action.icon"></fa-icon>
+          </button>
+        </span>
+      }
+      @if (showOpenButton()) {
+        <button
+          mat-icon-button
+          type="button"
+          class="expandable-card__action expandable-card__action--sky"
+          aria-label="Open in new tab"
+          matTooltip="Open in new tab"
+          (click)="handleOpen($event)"
+        >
+          <fa-icon [icon]="icons().open"></fa-icon>
+        </button>
+      }
+      @if (hasDetails()) {
+        <button
+          mat-icon-button
+          type="button"
+          class="expandable-card__toggle"
+          [attr.aria-label]="isExpanded() ? 'Collapse details' : 'Expand details'"
+          [matTooltip]="isExpanded() ? 'Collapse details' : 'Expand details'"
+          (click)="toggleExpanded($event)"
+        >
+          <fa-icon [icon]="isExpanded() ? icons().collapse : icons().expand"></fa-icon>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isExpanded() && hasDetails()) {
+    <div class="expandable-card__details">
+      <ng-content></ng-content>
+    </div>
+  }
+</article>

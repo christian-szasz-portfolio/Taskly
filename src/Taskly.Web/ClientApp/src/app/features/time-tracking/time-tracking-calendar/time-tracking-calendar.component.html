@@ -1,0 +1,81 @@
+<div class="time-tracking-calendar">
+  <!-- Header Toolbar -->
+  <header class="calendar-toolbar">
+    <div class="toolbar-left">
+      <button mat-stroked-button (click)="navigateToday()" class="today-btn">
+        Today
+      </button>
+      <div class="nav-buttons">
+        <button mat-icon-button (click)="navigatePrev()" matTooltip="Previous">
+          <fa-icon [icon]="prevIcon"></fa-icon>
+        </button>
+        <button mat-icon-button (click)="navigateNext()" matTooltip="Next">
+          <fa-icon [icon]="nextIcon"></fa-icon>
+        </button>
+      </div>
+      <h2 class="calendar-title">{{ currentTitle() }}</h2>
+    </div>
+
+    <div class="toolbar-center">
+      @if (loading()) {
+        <mat-spinner diameter="24"></mat-spinner>
+      }
+      <span class="total-duration" matTooltip="Total time logged in this period">
+        {{ totalDuration() }}
+      </span>
+    </div>
+
+    <div class="toolbar-right">
+      <div class="view-buttons">
+        <button
+          mat-stroked-button
+          [class.active]="currentView() === 'timeGridDay'"
+          (click)="setView('timeGridDay')"
+          matTooltip="Day view">
+          <fa-icon [icon]="dayIcon"></fa-icon>
+          Day
+        </button>
+        <button
+          mat-stroked-button
+          [class.active]="currentView() === 'timeGridWeek'"
+          (click)="setView('timeGridWeek')"
+          matTooltip="Week view">
+          <fa-icon [icon]="weekIcon"></fa-icon>
+          Week
+        </button>
+        <button
+          mat-stroked-button
+          [class.active]="currentView() === 'dayGridMonth'"
+          (click)="setView('dayGridMonth')"
+          matTooltip="Month view">
+          <fa-icon [icon]="monthIcon"></fa-icon>
+          Month
+        </button>
+      </div>
+      <span [matTooltip]="addEntryDisabledNote">
+        <button
+          mat-flat-button
+          color="primary"
+          class="add-entry-btn"
+          disabled
+        >
+          <fa-icon [icon]="addIcon"></fa-icon>
+          Add Entry
+        </button>
+      </span>
+    </div>
+  </header>
+
+  <!-- Calendar Container -->
+  <div class="calendar-container">
+    <full-calendar #calendar [options]="calendarOptions()"></full-calendar>
+  </div>
+
+  <!-- Loading Overlay -->
+  @if (saving()) {
+    <div class="saving-overlay">
+      <mat-spinner diameter="40"></mat-spinner>
+      <span>Saving...</span>
+    </div>
+  }
+</div>

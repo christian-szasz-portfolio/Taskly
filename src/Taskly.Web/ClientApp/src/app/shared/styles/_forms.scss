@@ -1,0 +1,282 @@
+// =============================================================================
+// Shared Form Styles
+// =============================================================================
+// Import with: @use 'app/shared/styles/forms' as forms;
+// Or in component: @use '../../../shared/styles/forms';
+
+// =============================================================================
+// Layout Classes
+// =============================================================================
+
+/// Full width form field
+.full-width {
+  width: 100%;
+}
+
+/// Half width form field (for side-by-side layout)
+.half-width {
+  flex: 1;
+  min-width: 0; // Allow shrinking in flex container
+}
+
+/// Form row - horizontal layout for form fields
+.form-row {
+  display: flex;
+  gap: 1rem;
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+/// Two-column grid layout
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+/// Three-column grid layout
+.form-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// =============================================================================
+// Form Actions
+// =============================================================================
+
+/// Form actions container (submit/cancel buttons)
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+
+  &--border {
+    border-top: 1px solid var(--border-muted);
+  }
+
+  &--space-between {
+    justify-content: space-between;
+  }
+
+  &--center {
+    justify-content: center;
+  }
+
+  &--start {
+    justify-content: flex-start;
+  }
+}
+
+// =============================================================================
+// Submit Button
+// =============================================================================
+
+/// Submit button base styling
+.submit-button {
+  min-width: 120px;
+  height: 48px;
+  font-size: 1rem;
+  font-weight: 500;
+
+  mat-spinner {
+    margin: 0 auto;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+}
+
+// =============================================================================
+// Spacer Utility
+// =============================================================================
+
+/// Flexible spacer (pushes elements apart)
+.spacer {
+  flex: 1;
+}
+
+// =============================================================================
+// Form Section
+// =============================================================================
+
+/// Form section with visual separator
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 1rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+
+    fa-icon {
+      color: var(--brand-primary);
+    }
+  }
+
+  &__description {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin: 0 0 0.5rem;
+    line-height: 1.4;
+  }
+}
+
+// =============================================================================
+// Form Field Modifiers
+// =============================================================================
+
+/// Compact form field (reduced margin)
+.form-field-compact {
+  ::ng-deep {
+    .mat-mdc-form-field-subscript-wrapper {
+      height: 0;
+    }
+  }
+}
+
+/// Form field with icon prefix spacing fix
+.form-field-icon-prefix {
+  ::ng-deep {
+    .mat-mdc-form-field-icon-prefix {
+      padding-right: 8px !important;
+      padding-left: 8px !important;
+      color: var(--text-secondary) !important;
+    }
+  }
+}
+
+// =============================================================================
+// Validation States
+// =============================================================================
+
+/// Success state indicator
+.form-field-success {
+  ::ng-deep {
+    --mdc-outlined-text-field-outline-color: var(--status-success);
+    --mdc-outlined-text-field-hover-outline-color: var(--status-success-dark);
+    --mdc-outlined-text-field-focus-outline-color: var(--status-success);
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: rgba(var(--status-success-rgb), 0.04);
+    }
+  }
+}
+
+/// Warning state indicator
+.form-field-warning {
+  ::ng-deep {
+    --mdc-outlined-text-field-outline-color: var(--status-warning);
+    --mdc-outlined-text-field-hover-outline-color: var(--status-warning-dark);
+    --mdc-outlined-text-field-focus-outline-color: var(--status-warning);
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: rgba(var(--status-warning-rgb), 0.04);
+    }
+  }
+}
+
+// =============================================================================
+// Character Counter
+// =============================================================================
+
+/// Character counter hint styling
+.char-counter {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+
+  &--warning {
+    color: var(--status-warning);
+  }
+
+  &--error {
+    color: var(--status-error);
+  }
+}
+
+// =============================================================================
+// Inline Form
+// =============================================================================
+
+/// Inline form layout (label + input on same line)
+.form-inline {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  label {
+    flex-shrink: 0;
+    min-width: 100px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .form-inline__field {
+    flex: 1;
+  }
+}
+
+// =============================================================================
+// Chip Input
+// =============================================================================
+
+/// Chip input container styling
+.chip-input-container {
+  min-height: 56px;
+  padding: 0.5rem 0;
+
+  .mat-mdc-chip-set {
+    margin-bottom: 0.25rem;
+  }
+}
+
+// =============================================================================
+// Form Hint
+// =============================================================================
+
+/// Custom form hint styling
+.form-hint {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+
+  &--info {
+    color: var(--status-info);
+  }
+
+  &--warning {
+    color: var(--status-warning);
+  }
+}

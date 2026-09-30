@@ -1,0 +1,55 @@
+<mat-form-field class="combo-box" [appearance]="appearance()">
+  <mat-label>{{ label() }}</mat-label>
+  <input
+    #comboInput
+    matInput
+    [placeholder]="placeholder()"
+    [matAutocomplete]="comboAutocomplete"
+    [formField]="field()"
+    (input)="handleInput($event)"
+    (blur)="handleBlur()"
+  />
+
+  <span matSuffix class="combo-box__suffix">
+    @if (showClear() && hasValue()) {
+      <button mat-icon-button type="button" aria-label="Clear selection" (click)="clearSelection()">
+        <fa-icon [icon]="icons().clear"></fa-icon>
+      </button>
+    }
+    <fa-icon class="combo-box__caret" [icon]="icons().caret"></fa-icon>
+  </span>
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+
+  @if (maxLength()) {
+    <mat-hint align="end">{{ valueLength() }}/{{ maxLength() }}</mat-hint>
+  }
+
+  @if (showError() && errorText()) {
+    <mat-error>{{ errorText() }}</mat-error>
+  }
+
+  <mat-autocomplete
+    #comboAutocomplete="matAutocomplete"
+    class="combo-box__panel"
+    [displayWith]="displayOption"
+    (optionSelected)="handleOptionSelected($event)"
+  >
+    @if (filteredOptions().length === 0) {
+      <mat-option disabled>No matches found</mat-option>
+    }
+
+    @for (option of filteredOptions(); track option.value) {
+      <mat-option [value]="option.value">
+        <span class="combo-box__option">
+          <span class="combo-box__label">{{ option.label }}</span>
+          @if (option.description) {
+            <span class="combo-box__description">{{ option.description }}</span>
+          }
+        </span>
+      </mat-option>
+    }
+  </mat-autocomplete>
+</mat-form-field>

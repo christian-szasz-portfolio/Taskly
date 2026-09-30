@@ -1,0 +1,99 @@
+.catalog-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.catalog-page__hero {
+  border-radius: 1.5rem;
+  padding: 2rem;
+  color: var(--text-on-brand);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  &--indigo {
+    background: radial-gradient(circle at top right, rgba(var(--accent-indigo-rgb), 0.15), transparent 60%),
+      linear-gradient(135deg, rgba(var(--text-primary-rgb), 0.55), rgba(var(--accent-indigo-rgb), 0.9));
+  }
+
+  &--emerald {
+    background: radial-gradient(circle at top right, rgba(var(--accent-emerald-rgb), 0.15), transparent 60%),
+      linear-gradient(135deg, rgba(var(--text-primary-rgb), 0.55), rgba(var(--accent-emerald-rgb), 0.45));
+  }
+
+  &--amber {
+    background: radial-gradient(circle at top right, rgba(var(--accent-amber-rgb), 0.15), transparent 60%),
+      linear-gradient(135deg, rgba(var(--text-primary-rgb), 0.55), rgba(var(--accent-amber-rgb), 0.45));
+  }
+
+  &--sky {
+    background: radial-gradient(circle at top right, rgba(var(--accent-sky-rgb), 0.15), transparent 60%),
+      linear-gradient(135deg, rgba(var(--text-primary-rgb), 0.55), rgba(var(--accent-sky-rgb), 0.45));
+  }
+}
+
+.catalog-page__eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  margin: 0 0 0.5rem;
+}
+
+.catalog-page__hero h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.catalog-page__body {
+  margin: 0.5rem 0 0;
+  max-width: 560px;
+  color: var(--hero-text-muted);
+}
+
+.catalog-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.catalog-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.catalog-empty {
+  border: 1px dashed var(--border-muted);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: repeating-linear-gradient(45deg, var(--status-neutral-bg), var(--status-neutral-bg) 10px, transparent 10px, transparent 20px);
+}
+
+.catalog-empty p {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.catalog-empty span {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .catalog-page__hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .catalog-page {
+    padding: 1rem;
+  }
+}

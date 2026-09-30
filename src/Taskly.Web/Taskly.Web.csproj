@@ -1,0 +1,91 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+	<PackageId>Taskly.WebApp</PackageId>
+	<Authors>sarissian08</Authors>
+	<Owners>sarissian08</Owners>
+	<OutputType>exe</OutputType>
+	<Description>The Taskly Web Application</Description>
+	<Copyright>Copyright 2025. All rights reserved.</Copyright>
+	<Nullable>enable</Nullable>
+	<SpaRoot>ClientApp\</SpaRoot>
+	<IsPackable>false</IsPackable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<PublishableProject>false</PublishableProject>
+	<InvariantGlobalization>false</InvariantGlobalization>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+	<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+	<AppDIInstalledThroughContent>true</AppDIInstalledThroughContent>
+	<EnableDefaultContentItems>false</EnableDefaultContentItems>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+	<DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+	<PreserveCompilationContext>true</PreserveCompilationContext>
+    <UserSecretsId>6c1ebae6-2da1-42c3-b3e2-83a369c6ee8f</UserSecretsId>
+  </PropertyGroup>
+	
+  <ItemGroup>
+    <InternalsVisibleTo Include="Taskly.Web.Test" />
+  </ItemGroup>
+
+  <!-- Exclude SPA source files from .NET compilation -->
+  <ItemGroup>
+	<Content Remove="$(SpaRoot)**" />
+	<TypeScriptCompile Remove="$(SpaRoot)**" />
+	<None Remove="$(SpaRoot)**" />
+	<!-- Make ClientApp visible in Solution Explorer without compiling -->
+	<None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**;$(SpaRoot)dist\**;$(SpaRoot).angular\**" />
+  </ItemGroup>
+
+  <!-- wwwroot contains the compiled Angular output -->
+  <ItemGroup>
+	<Content Include="wwwroot\**\*">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</Content>
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Update="appsettings.json">
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Common.Diagnostics" Version="0.4.0" />
+	<PackageReference Include="Common.Diagnostics.Azure" Version="0.1.2" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
+	<!-- Direct pin only to lift the transitive Microsoft.OpenApi off 2.0.0, which carries the
+	     high-severity advisory NU1903 / GHSA-v5pm-xwqc-g5wc. Nothing here references it directly;
+	     it arrives via Microsoft.AspNetCore.OpenApi and Scalar.AspNetCore. -->
+	<PackageReference Include="Microsoft.OpenApi" Version="2.12.0" />
+	<PackageReference Include="Scalar.AspNetCore" Version="2.11.6" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Taskly.Common\Taskly.Common.csproj" />
+    <ProjectReference Include="..\Taskly.Contracts\Taskly.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Serilog.AspNetCore" Version="10.0.0" />
+    <PackageReference Update="Serilog.Sinks.Console" Version="6.1.1" />
+  </ItemGroup>
+	
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+	<Exec Command="TASKKILL /F /IM &quot;$(AssemblyName).exe&quot; /FI &quot;PID gt 0&quot; &gt; nul 2&gt;&amp;1" IgnoreExitCode="true" />
+  </Target>
+
+  <Target Name="PreClean" BeforeTargets="CoreClean" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+	<CallTarget Targets="PreBuild" />
+	<!-- Wait one second to try to avoid locked files during rebuild -->
+	<Exec Command="ping 127.0.0.1 -n 2 &gt; nul" />
+  </Target>
+	
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+	<Message Importance="high" Text="Writing $(OutDir)build_completed.txt" />
+	<Exec Command="echo Build completed on %DATE% at %TIME% &gt; &quot;$(OutDir)build_completed.txt&quot;" />
+  </Target>
+
+</Project>

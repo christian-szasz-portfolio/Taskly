@@ -1,0 +1,18 @@
+<app-dialog-header
+  [title]="data.title"
+  [icon]="icon"
+  titleClass="warning-title"
+  (closeClick)="dismiss()" />
+
+<mat-dialog-content>
+  <p class="warning-message">{{ data.message }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="center">
+  @if (data.showReload) {
+    <button mat-button type="button" (click)="dismiss()">Close</button>
+    <button mat-flat-button color="primary" type="button" (click)="reload()">Reload</button>
+  } @else {
+    <button mat-flat-button color="primary" type="button" (click)="dismiss()">Close</button>
+  }
+</mat-dialog-actions>

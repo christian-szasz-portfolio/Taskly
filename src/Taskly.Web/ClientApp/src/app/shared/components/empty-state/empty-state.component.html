@@ -1,0 +1,29 @@
+<div
+  class="empty-state"
+  [class.empty-state--compact]="variant() === 'compact'"
+  [attr.role]="role()">
+
+  @if (icon()) {
+    <fa-icon [icon]="icon()!" class="empty-state__icon"></fa-icon>
+  }
+
+  <p class="empty-state__title">{{ title() }}</p>
+
+  @if (hint()) {
+    <span class="empty-state__hint">{{ hint() }}</span>
+  }
+
+  <!-- Projected content for custom elements -->
+  <ng-content />
+
+  @if (showAction()) {
+    <button
+      mat-stroked-button
+      color="primary"
+      type="button"
+      class="empty-state__action"
+      (click)="onActionClick()">
+      {{ actionLabel() }}
+    </button>
+  }
+</div>

@@ -1,0 +1,9 @@
+<div class="project-list">
+  @for (project of projects(); track trackById($index, project)) {
+    <app-project-card
+      [project]="project"
+      (activate)="handleActivate(project)"
+      (deactivate)="handleDeactivate(project)"
+    />
+  }
+</div>

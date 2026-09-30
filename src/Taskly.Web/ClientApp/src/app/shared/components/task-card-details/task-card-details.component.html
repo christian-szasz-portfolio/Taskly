@@ -1,0 +1,65 @@
+@let item = task();
+
+@if (hasDescription()) {
+  <div class="detail-row detail-row--description">
+    <p [appRichTextHtml]="item.description"></p>
+  </div>
+}
+
+<div class="detail-grid">
+  @if (item.assignedTo) {
+    <div class="detail-item">
+      <fa-icon [icon]="icons.assignee" class="detail-icon"></fa-icon>
+      <span class="detail-label">Assignee</span>
+      <span class="detail-value">{{ item.assignedTo }}</span>
+    </div>
+  }
+
+  @if (formattedDueDate()) {
+    <div class="detail-item">
+      <fa-icon [icon]="icons.dueDate" class="detail-icon"></fa-icon>
+      <span class="detail-label">Due Date</span>
+      <span class="detail-value">{{ formattedDueDate() }}</span>
+    </div>
+  }
+
+  <div class="detail-item">
+    <fa-icon [icon]="icons.priority" class="detail-icon"></fa-icon>
+    <span class="detail-label">Priority</span>
+    <span class="detail-value">{{ priorityLabel() }}</span>
+  </div>
+
+  <div class="detail-item">
+    <fa-icon [icon]="icons.status" class="detail-icon"></fa-icon>
+    <span class="detail-label">Status</span>
+    <span class="detail-value">{{ statusLabel() }}</span>
+  </div>
+</div>
+
+@if (hasLabels()) {
+  <div class="detail-row">
+    <div class="detail-header">
+      <fa-icon [icon]="icons.labels" class="detail-icon"></fa-icon>
+      <span class="detail-label">Labels</span>
+    </div>
+    <div class="chip-list">
+      @for (label of item.labels; track label) {
+        <span class="chip chip--label">{{ label }}</span>
+      }
+    </div>
+  </div>
+}
+
+@if (hasComponents()) {
+  <div class="detail-row">
+    <div class="detail-header">
+      <fa-icon [icon]="icons.components" class="detail-icon"></fa-icon>
+      <span class="detail-label">Components</span>
+    </div>
+    <div class="chip-list">
+      @for (component of item.components; track component) {
+        <span class="chip chip--component">{{ component }}</span>
+      }
+    </div>
+  </div>
+}

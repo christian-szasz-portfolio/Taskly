@@ -1,0 +1,21 @@
+<nav
+  class="sidebar-menu"
+  [class]="classPrefix() + '-menu'"
+  role="navigation"
+  [attr.aria-label]="ariaLabel()">
+
+  @for (item of items(); track item.id) {
+    <button
+      type="button"
+      class="sidebar-menu__item"
+      [class]="classPrefix() + '-menu__item'"
+      [class.sidebar-menu__item--active]="isSelected(item.id)"
+      [class.sidebar-menu__item--disabled]="item.disabled"
+      [disabled]="item.disabled"
+      [attr.aria-current]="isSelected(item.id) ? 'page' : null"
+      (click)="onItemClick(item)">
+      <fa-icon [icon]="item.icon"></fa-icon>
+      <span>{{ item.label }}</span>
+    </button>
+  }
+</nav>

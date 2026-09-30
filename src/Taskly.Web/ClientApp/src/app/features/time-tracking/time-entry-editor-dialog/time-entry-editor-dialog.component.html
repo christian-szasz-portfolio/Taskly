@@ -1,0 +1,103 @@
+<app-dialog-header
+  [title]="dialogTitle"
+  [icon]="clockIcon"
+  (closeClick)="handleCancel()" />
+
+<mat-dialog-content class="dialog-content">
+  <!-- Work Item Key -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Work Item Key</mat-label>
+    <input
+      matInput
+      [value]="taskKeyInput()"
+      (input)="onTaskKeyInput($event)"
+      placeholder="An issue key, such as DEMO-1"
+      required
+    />
+    @if (taskKeyInput()) {
+      <button mat-icon-button matSuffix (click)="clearTaskLink(); $event.stopPropagation()" matTooltip="Clear">
+        <fa-icon [icon]="clearIcon"></fa-icon>
+      </button>
+    }
+  </mat-form-field>
+
+  <!-- All Day Checkbox -->
+  <mat-checkbox
+    [checked]="isAllDay()"
+    (change)="onAllDayChange($event.checked)"
+    class="all-day-checkbox">
+    All-day event
+  </mat-checkbox>
+
+  <!-- Date/Time Section -->
+  <div class="datetime-row">
+    <app-date-picker-input
+      class="date-field"
+      label="Start Date"
+      [ngModel]="startDateValue()"
+      (ngModelChange)="onStartDateChange($event)"
+      [required]="true">
+    </app-date-picker-input>
+
+    @if (!isAllDay()) {
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>Start Time</mat-label>
+        <input
+          matInput
+          type="time"
+          [value]="startTime()"
+          (input)="startTime.set($any($event.target).value)"
+          required
+        />
+      </mat-form-field>
+    }
+  </div>
+
+  <div class="datetime-row">
+    <app-date-picker-input
+      class="date-field"
+      label="End Date"
+      [ngModel]="endDateValue()"
+      (ngModelChange)="onEndDateChange($event)"
+      [required]="true">
+    </app-date-picker-input>
+
+    @if (!isAllDay()) {
+      <mat-form-field appearance="outline" class="time-field">
+        <mat-label>End Time</mat-label>
+        <input
+          matInput
+          type="time"
+          [value]="endTime()"
+          (input)="endTime.set($any($event.target).value)"
+          required
+        />
+      </mat-form-field>
+    }
+  </div>
+
+  <!-- Description -->
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Notes (optional)</mat-label>
+    <textarea
+      matInput
+      [value]="description()"
+      (input)="description.set($any($event.target).value)"
+      placeholder="Add any notes about this time entry..."
+      rows="3"
+      maxlength="2000">
+    </textarea>
+    <mat-hint align="end">{{ description().length }}/2000</mat-hint>
+  </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="handleCancel()">Cancel</button>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="handleSubmit()"
+    [disabled]="!isValid">
+    Save Changes
+  </button>
+</mat-dialog-actions>

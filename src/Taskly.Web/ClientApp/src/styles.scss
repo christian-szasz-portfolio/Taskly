@@ -1,0 +1,621 @@
+@use '@angular/material' as mat;
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+// Define the primary Material palette once and reuse it everywhere.
+$todo-app-theme: mat.define-theme((
+	color: (
+		theme-type: light,
+		primary: mat.$violet-palette,
+		tertiary: mat.$rose-palette,
+	),
+	density: (
+		scale: 0,
+	),
+));
+
+// Define dark theme
+$todo-app-dark-theme: mat.define-theme((
+	color: (
+		theme-type: dark,
+		primary: mat.$violet-palette,
+		tertiary: mat.$rose-palette,
+	),
+	density: (
+		scale: 0,
+	),
+));
+
+@include mat.core();
+
+// Override button theme tokens for proper text contrast
+:root {
+	@include mat.all-component-themes($todo-app-theme);
+
+	color-scheme: light;
+	--brand-primary: #6759ff;
+	--brand-primary-rgb: 103, 89, 255;
+	--brand-accent: #ff6cab;
+	--brand-accent-rgb: 255, 108, 171;
+	--brand-contrast: #00c6ff;
+	--surface-page: #eef1ff;
+	--surface-card: #ffffff;
+	--surface-muted: #f7f8fc;
+	--surface-inverse: #0f172a;
+	--text-primary: #0f172a;
+	--text-primary-rgb: 15, 23, 42;
+	--text-secondary: #475467;
+	--text-tertiary: #94a3b8;
+	--text-muted: #475467;
+	--text-on-brand: #ffffff;
+	--text-on-inverse: #f8fafc;
+
+	// Fix button text colors for primary filled buttons (must come after --text-on-brand is defined)
+	// Material 3 uses --mat-button-filled-label-text-color for unelevated/flat buttons
+	--mat-button-filled-label-text-color: var(--text-on-brand);
+	--mat-button-filled-state-layer-color: var(--text-on-brand);
+	--mdc-filled-button-label-text-color: var(--text-on-brand);
+	--mat-filled-button-state-layer-color: var(--text-on-brand);
+
+	--border-muted: rgba(15, 23, 42, 0.08);
+	--border-subtle: rgba(15, 23, 42, 0.06);
+	--shadow-sm: 0 10px 35px rgba(15, 23, 42, 0.08);
+	--shadow-md: 0 15px 35px rgba(15, 23, 42, 0.12);
+	--font-display: 'Space Grotesk', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+	// Semantic status colors
+	--status-error: #ef4444;
+	--status-error-rgb: 239, 68, 68;
+	--status-error-dark: #b91c1c;
+	--status-error-bg: rgba(239, 68, 68, 0.1);
+	--status-success: #22c55e;
+	--status-success-rgb: 34, 197, 94;
+	--status-success-dark: #16a34a;
+	--status-success-bg: rgba(34, 197, 94, 0.1);
+	--status-warning: #f59e0b;
+	--status-warning-rgb: 245, 158, 11;
+	--status-warning-dark: #92400e;
+	--status-warning-bg: rgba(245, 158, 11, 0.1);
+	--status-info: #3b82f6;
+	--status-info-rgb: 59, 130, 246;
+	--status-info-dark: #1d4ed8;
+	--status-info-bg: rgba(59, 130, 246, 0.1);
+	--status-neutral: #64748b;
+	--status-neutral-rgb: 100, 116, 139;
+	--status-neutral-bg: rgba(100, 116, 139, 0.1);
+
+	// Theme accent colors (for cards, badges, etc.)
+	--accent-indigo: #6366f1;
+	--accent-indigo-rgb: 99, 102, 241;
+	--accent-sky: #0ea5e9;
+	--accent-sky-rgb: 14, 165, 233;
+	--accent-emerald: #22c55e;
+	--accent-emerald-rgb: 34, 197, 94;
+	--accent-amber: #f59e0b;
+	--accent-amber-rgb: 245, 158, 11;
+	--accent-rose: #f43f5e;
+	--accent-rose-rgb: 244, 63, 94;
+	--accent-slate: #64748b;
+	--accent-slate-rgb: 100, 116, 139;
+	--accent-purple: #8b5cf6;
+	--accent-purple-rgb: 139, 92, 246;
+
+	// Code block colors (VS Code dark theme)
+	--code-block-bg: #1e1e1e;
+	--code-text: #d4d4d4;
+	--code-keyword: #569cd6;
+	--code-string: #ce9178;
+	--code-number: #b5cea8;
+	--code-comment: #6a9955;
+	--code-type: #4ec9b0;
+	--code-function: #dcdcaa;
+	--code-property: #9cdcfe;
+	--code-decorator: #c586c0;
+
+	// Overlay colors
+	--overlay-dark: rgba(0, 0, 0, 0.3);
+	--overlay-light: rgba(255, 255, 255, 0.12);
+	--overlay-light-strong: rgba(255, 255, 255, 0.2);
+	--hero-overlay: rgba(5, 10, 33, 0.35);
+	--hero-overlay-hover: rgba(5, 10, 33, 0.45);
+	--hero-border: rgba(255, 255, 255, 0.15);
+	--hero-border-strong: rgba(255, 255, 255, 0.5);
+	--hero-text-muted: rgba(255, 255, 255, 0.8);
+
+	// Hero banner gradient (home page welcome banner)
+	--hero-banner-bg: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(99, 102, 241, 0.85));
+	--hero-banner-accent: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 60%);
+
+	// Component-specific variables
+	--topbar-bg: rgba(4, 8, 28, 0.92);
+	--topbar-text: #f8fafc;
+	--topbar-border: rgba(255, 255, 255, 0.08);
+	--kanban-column-bg: rgba(255, 255, 255, 0.7);
+	--kanban-card-bg: #ffffff;
+	--kanban-row-bg: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(248, 250, 252, 0.3));
+	--dialog-bg: #ffffff;
+	--input-bg: #ffffff;
+	--input-border: rgba(15, 23, 42, 0.15);
+	--hover-overlay: rgba(0, 0, 0, 0.04);
+	--focus-ring: rgba(103, 89, 255, 0.3);
+
+	// Scrollbar colors
+	--scrollbar-thumb: rgba(15, 23, 42, 0.12);
+	--scrollbar-thumb-hover: rgba(15, 23, 42, 0.35);
+	--scrollbar-thumb-active: rgba(15, 23, 42, 0.55);
+}
+
+// Dark mode styles
+body.dark-mode {
+	@include mat.all-component-colors($todo-app-dark-theme);
+
+	color-scheme: dark;
+	--brand-primary: #8b7fff;
+	--brand-primary-rgb: 139, 127, 255;
+	--brand-accent: #ff8ec4;
+	--brand-accent-rgb: 255, 142, 196;
+	--brand-contrast: #00d4ff;
+	--surface-page: #0f172a;
+	--surface-card: #1e293b;
+	--surface-muted: #1a2234;
+	--surface-inverse: #f8fafc;
+	--text-primary: #f1f5f9;
+	--text-primary-rgb: 241, 245, 249;
+	--text-secondary: #94a3b8;
+	--text-tertiary: #64748b;
+	--text-muted: #94a3b8;
+	--text-on-brand: #ffffff;
+	--text-on-inverse: #0f172a;
+
+	// Fix button text colors for primary filled buttons in dark mode (must come after --text-on-brand)
+	// Material 3 uses --mat-button-filled-label-text-color for unelevated/flat buttons
+	--mat-button-filled-label-text-color: var(--text-on-brand);
+	--mat-button-filled-state-layer-color: var(--text-on-brand);
+	--mdc-filled-button-label-text-color: var(--text-on-brand);
+	--mat-filled-button-state-layer-color: var(--text-on-brand);
+
+	--border-muted: rgba(248, 250, 252, 0.08);
+	--border-subtle: rgba(248, 250, 252, 0.06);
+	--shadow-sm: 0 10px 35px rgba(0, 0, 0, 0.25);
+	--shadow-md: 0 15px 35px rgba(0, 0, 0, 0.35);
+
+	// Semantic status colors (lighter for dark mode contrast)
+	--status-error: #f87171;
+	--status-error-rgb: 248, 113, 113;
+	--status-error-dark: #ef4444;
+	--status-error-bg: rgba(239, 68, 68, 0.15);
+	--status-success: #4ade80;
+	--status-success-rgb: 74, 222, 128;
+	--status-success-dark: #22c55e;
+	--status-success-bg: rgba(34, 197, 94, 0.15);
+	--status-warning: #fbbf24;
+	--status-warning-rgb: 251, 191, 36;
+	--status-warning-dark: #b45309;
+	--status-warning-bg: rgba(245, 158, 11, 0.15);
+	--status-info: #60a5fa;
+	--status-info-rgb: 96, 165, 250;
+	--status-info-dark: #3b82f6;
+	--status-info-bg: rgba(59, 130, 246, 0.15);
+	--status-neutral: #94a3b8;
+	--status-neutral-rgb: 148, 163, 184;
+	--status-neutral-bg: rgba(100, 116, 139, 0.15);
+
+	// Theme accent colors (lighter for dark mode)
+	--accent-indigo: #818cf8;
+	--accent-indigo-rgb: 129, 140, 248;
+	--accent-sky: #38bdf8;
+	--accent-sky-rgb: 56, 189, 248;
+	--accent-emerald: #4ade80;
+	--accent-emerald-rgb: 74, 222, 128;
+	--accent-amber: #fbbf24;
+	--accent-amber-rgb: 251, 191, 36;
+	--accent-rose: #fb7185;
+	--accent-rose-rgb: 251, 113, 133;
+	--accent-slate: #94a3b8;
+	--accent-slate-rgb: 148, 163, 184;
+	--accent-purple: #a78bfa;
+	--accent-purple-rgb: 167, 139, 250;
+
+	// Code block colors (same - already dark theme)
+	--code-block-bg: #1e1e1e;
+	--code-text: #d4d4d4;
+	--code-keyword: #569cd6;
+	--code-string: #ce9178;
+	--code-number: #b5cea8;
+	--code-comment: #6a9955;
+	--code-type: #4ec9b0;
+	--code-function: #dcdcaa;
+	--code-property: #9cdcfe;
+	--code-decorator: #c586c0;
+
+	// Overlay colors
+	--overlay-dark: rgba(0, 0, 0, 0.5);
+	--overlay-light: rgba(255, 255, 255, 0.08);
+	--overlay-light-strong: rgba(255, 255, 255, 0.15);
+	--hero-overlay: rgba(5, 10, 33, 0.5);
+	--hero-overlay-hover: rgba(5, 10, 33, 0.6);
+	--hero-border: rgba(255, 255, 255, 0.12);
+	--hero-border-strong: rgba(255, 255, 255, 0.4);
+	--hero-text-muted: rgba(255, 255, 255, 0.75);
+
+	// Hero banner gradient (home page welcome banner) - more vibrant in dark mode
+	--hero-banner-bg: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.5));
+	--hero-banner-accent: radial-gradient(circle at top right, rgba(139, 127, 255, 0.25), transparent 60%);
+
+	// Component-specific dark mode overrides
+	--topbar-bg: rgba(15, 23, 42, 0.95);
+	--topbar-text: #f8fafc;
+	--topbar-border: rgba(255, 255, 255, 0.06);
+	--kanban-column-bg: rgba(30, 41, 59, 0.7);
+	--kanban-card-bg: #1e293b;
+	--kanban-row-bg: linear-gradient(to bottom, rgba(30, 41, 59, 0.5), rgba(15, 23, 42, 0.3));
+	--dialog-bg: #1e293b;
+	--input-bg: #0f172a;
+	--input-border: rgba(248, 250, 252, 0.12);
+	--hover-overlay: rgba(255, 255, 255, 0.04);
+	--focus-ring: rgba(139, 127, 255, 0.4);
+
+	// Scrollbar colors
+	--scrollbar-thumb: rgba(248, 250, 252, 0.12);
+	--scrollbar-thumb-hover: rgba(248, 250, 252, 0.25);
+	--scrollbar-thumb-active: rgba(248, 250, 252, 0.35);
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-display);
+	background: var(--surface-page) !important;
+	color: var(--text-primary);
+	position: fixed;
+	inset: 0;
+	width: 100%;
+	overflow: hidden;
+	transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+app-root {
+	display: block;
+	height: 100%;
+	min-height: 0;
+	overflow: hidden;
+	// Sit above the two fixed background layers painted on <body> (::before / ::after, z-index 0).
+	position: relative;
+	z-index: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Per-page backgrounds — a blurred, theme-scrimmed photograph per route.
+//
+// <body> is the fixed, full-bleed paint surface (page content scrolls inside
+// .app-shell__main), so these two pseudo-layers stay behind everything and the
+// sticky, blurred header frosts over them for free. ::before paints the page's
+// photo (heavily blurred + a slow Ken-Burns drift); ::after lays a translucent
+// scrim of --surface-page plus a soft vignette so cards and text stay readable.
+// Each `body.page-*` class only sets --page-image; the layers live here once.
+// The scrim uses --surface-page, so readability adapts to dark mode for free.
+// ---------------------------------------------------------------------------
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background: var(--page-image, none) center center / cover no-repeat;
+	// Light blur softens the photo while keeping it recognisable; scale hides the
+	// blurred edge bleed and gives the drift room to move without exposing gaps.
+	filter: blur(12px) saturate(1.15) brightness(1.05);
+	transform: scale(1.12);
+	animation: bg-drift 42s ease-in-out infinite alternate;
+	will-change: transform;
+}
+
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	// Translucent wash of the page colour keeps content legible over the photo;
+	// the inset vignette adds depth ("shadows") around the edges.
+	background: color-mix(in srgb, var(--surface-page) 68%, transparent);
+	box-shadow: inset 0 0 220px 40px var(--overlay-dark);
+}
+
+// Dark theme: the photo needs a touch more scrim to keep contrast on dark surfaces.
+body.dark-mode::after {
+	background: color-mix(in srgb, var(--surface-page) 74%, transparent);
+}
+
+// The task-detail page is card-heavy and uses a soft, pale photo, so it barely reads
+// under the default scrim — lighten it here so the image comes through in the gutters.
+body.page-task-detail::after {
+	background: color-mix(in srgb, var(--surface-page) 44%, transparent);
+}
+
+body.dark-mode.page-task-detail::after {
+	background: color-mix(in srgb, var(--surface-page) 56%, transparent);
+}
+
+@keyframes bg-drift {
+	0% {
+		transform: scale(1.2) translate3d(0, 0, 0);
+	}
+	100% {
+		transform: scale(1.28) translate3d(-1.5%, -1%, 0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	body::before {
+		animation: none;
+	}
+}
+
+// Per-page photo — one heavily-blurred image each, toned to the page's identity.
+body.page-home {
+	--page-image: url('/backgrounds/home.jpg');
+}
+
+body.page-kanban {
+	--page-image: url('/backgrounds/kanban.jpg');
+}
+
+body.page-epics {
+	--page-image: url('/backgrounds/epics.jpg');
+}
+
+body.page-backlog {
+	--page-image: url('/backgrounds/backlog.jpg');
+}
+
+body.page-resolved {
+	--page-image: url('/backgrounds/resolved.jpg');
+}
+
+body.page-task-detail {
+	--page-image: url('/backgrounds/task-detail.jpg');
+}
+
+body.page-time {
+	--page-image: url('/backgrounds/time.jpg');
+}
+
+body.page-maintenance {
+	--page-image: url('/backgrounds/maintenance.jpg');
+}
+
+body.page-no-project {
+	--page-image: url('/backgrounds/no-project.jpg');
+}
+
+body.page-trial {
+	--page-image: url('/backgrounds/trial.jpg');
+}
+
+body.page-default {
+	--page-image: url('/backgrounds/home.jpg');
+}
+
+a {
+	color: inherit;
+}
+
+// Reduce motion for users who prefer reduced animations
+body.reduce-motion,
+body.reduce-motion * {
+	animation-duration: 0.01ms !important;
+	animation-iteration-count: 1 !important;
+	transition-duration: 0.01ms !important;
+	scroll-behavior: auto !important;
+}
+
+// Dark mode overrides for Material overlay panels (dropdowns, menus, autocomplete)
+body.dark-mode {
+	// Select dropdown panels
+	.mat-mdc-select-panel {
+		background-color: var(--surface-card) !important;
+
+		.mat-mdc-option {
+			color: var(--text-primary);
+
+			&:hover:not(.mdc-list-item--disabled) {
+				background-color: var(--hover-overlay);
+			}
+
+			&.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+				background-color: rgba(139, 127, 255, 0.15);
+			}
+		}
+	}
+
+	// Autocomplete panels
+	.mat-mdc-autocomplete-panel {
+		background-color: var(--surface-card) !important;
+
+		.mat-mdc-option {
+			color: var(--text-primary);
+
+			&:hover:not(.mdc-list-item--disabled) {
+				background-color: var(--hover-overlay);
+			}
+
+			&.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+				background-color: rgba(139, 127, 255, 0.15);
+			}
+		}
+	}
+
+	// Menu panels
+	.mat-mdc-menu-panel {
+		background-color: var(--surface-card) !important;
+
+		.mat-mdc-menu-item {
+			color: var(--text-primary);
+
+			&:hover:not([disabled]) {
+				background-color: var(--hover-overlay);
+			}
+
+			.mat-icon,
+			fa-icon {
+				color: var(--text-secondary);
+			}
+		}
+	}
+
+	// Dialog panels
+	.mat-mdc-dialog-container {
+		.mdc-dialog__surface {
+			background-color: var(--dialog-bg) !important;
+		}
+
+		.mat-mdc-dialog-title {
+			color: var(--text-primary);
+		}
+
+		.mat-mdc-dialog-content {
+			color: var(--text-primary);
+		}
+	}
+
+	// Form field styles
+	.mat-mdc-form-field {
+		.mat-mdc-text-field-wrapper {
+			background-color: var(--input-bg);
+		}
+
+		.mdc-text-field--outlined .mdc-notched-outline__leading,
+		.mdc-text-field--outlined .mdc-notched-outline__notch,
+		.mdc-text-field--outlined .mdc-notched-outline__trailing {
+			border-color: var(--input-border);
+		}
+
+		.mat-mdc-input-element {
+			color: var(--text-primary);
+		}
+
+		.mat-mdc-floating-label {
+			color: var(--text-secondary);
+		}
+
+		.mat-mdc-form-field-hint {
+			color: var(--text-tertiary);
+		}
+	}
+
+	// Chip styles
+	.mat-mdc-chip {
+		background-color: var(--surface-muted) !important;
+		color: var(--text-primary) !important;
+
+		.mat-mdc-chip-remove {
+			color: var(--text-secondary);
+
+			&:hover {
+				color: #f87171;
+			}
+		}
+	}
+}
+
+// Dialog header with close button
+.dialog-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding-right: 1rem;
+
+	h2[mat-dialog-title] {
+		flex: 1;
+		margin-bottom: 0;
+	}
+}
+
+.dialog-close-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	border: none;
+	border-radius: 50%;
+	background-color: var(--status-error);
+	color: #ffffff;
+	cursor: pointer;
+	transition: background-color 0.2s ease, transform 0.15s ease;
+	flex-shrink: 0;
+
+	fa-icon {
+		font-size: 0.875rem;
+	}
+
+	&:hover {
+		background-color: var(--status-error-dark);
+		transform: scale(1.05);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--focus-ring);
+		outline-offset: 2px;
+	}
+
+	&:active {
+		transform: scale(0.95);
+	}
+}
+
+// Fix for Material filled button text visibility
+// The text color should always be white on primary color buttons
+// Target Material 3 button components with multiple selectors for specificity
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-fab.mat-primary,
+.mat-mdc-mini-fab.mat-primary,
+button[mat-flat-button][color='primary'],
+button[mat-raised-button][color='primary'],
+button[mat-fab][color='primary'],
+button[mat-mini-fab][color='primary'] {
+	// Material 3 uses --mat-button-filled-label-text-color for button text
+	--mat-button-filled-label-text-color: var(--text-on-brand) !important;
+	--mat-button-filled-state-layer-color: var(--text-on-brand) !important;
+	--mdc-filled-button-label-text-color: var(--text-on-brand) !important;
+	--mdc-protected-button-label-text-color: var(--text-on-brand) !important;
+	--mat-filled-button-label-text-color: var(--text-on-brand) !important;
+	--mat-protected-button-label-text-color: var(--text-on-brand) !important;
+	--mat-fab-foreground-color: var(--text-on-brand) !important;
+	--mat-mdc-button-persistent-ripple-color: var(--text-on-brand) !important;
+
+	// Direct text color override
+	color: var(--text-on-brand) !important;
+
+	// Target the button label element
+	.mdc-button__label,
+	.mat-mdc-button-touch-target + .mdc-button__label {
+		color: var(--text-on-brand) !important;
+	}
+
+	// Target icons
+	fa-icon,
+	.mat-icon {
+		color: var(--text-on-brand) !important;
+	}
+}
+
+// Also target the button text when it's directly inside the button (no .mdc-button__label wrapper)
+button.mat-mdc-unelevated-button.mat-primary,
+button.mat-mdc-raised-button.mat-primary {
+	span:not(.mat-mdc-button-touch-target):not(.mat-mdc-focus-indicator):not(.mat-mdc-button-ripple) {
+		color: var(--text-on-brand) !important;
+	}
+}
+
+

@@ -1,0 +1,53 @@
+.app-shell {
+	height: 100%;
+	min-height: 0;
+	display: flex;
+	flex-direction: column;
+	color: var(--text-primary);
+}
+
+
+.app-shell__main {
+	flex: 1;
+	padding: 1.5rem;
+	display: flex;
+	min-height: 0;
+	overflow-y: auto;
+	overflow-x: hidden;
+
+	// When containing a full-height page component (maintenance, etc.)
+	// the page controls its own scroll, not the main container
+	&:has(app-system-tasks-page, app-notifications-page) {
+		overflow: hidden;
+		padding: 0;
+	}
+}
+
+.app-shell__content {
+	width: min(1200px, 100%);
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-height: 0;
+
+	// Full-height pages need to take all available space
+	> app-system-tasks-page,
+	> app-notifications-page {
+		flex: 1;
+		min-height: 0;
+	}
+}
+
+.app-shell__footer {
+	padding: 1.5rem 2rem;
+	text-align: center;
+	font-size: 0.9rem;
+	color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+	.app-shell__main {
+		padding: 1rem;
+	}
+}

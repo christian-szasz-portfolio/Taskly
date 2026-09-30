@@ -1,0 +1,42 @@
+@use '../../styles/forms' as forms;
+
+// Dialog actions inherit Material styling
+::ng-deep mat-dialog-actions {
+  gap: 0.5rem;
+}
+
+// Standalone form actions
+.form-actions {
+  @extend .form-actions;
+
+  &.align-start {
+    justify-content: flex-start;
+  }
+
+  &.align-center {
+    justify-content: center;
+  }
+
+  &.align-end {
+    justify-content: flex-end;
+  }
+}
+
+// Spacer pushes buttons apart
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Delete button styling
+.delete-btn {
+  fa-icon {
+    margin-right: 0.375rem;
+  }
+}
+
+// Loading spinner in button
+.button-spinner {
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}

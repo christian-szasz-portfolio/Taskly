@@ -1,0 +1,98 @@
+<section class="maintenance-page" aria-live="polite">
+  <!-- Hero Header -->
+  <header class="maintenance-page__hero" [class.maintenance-page__hero--rose]="heroVariant() === 'rose'">
+    <div class="maintenance-page__hero-left">
+      <p class="maintenance-page__eyebrow">Maintenance</p>
+      <h1>{{ title() }}</h1>
+      <p class="maintenance-page__body">{{ description() }}</p>
+    </div>
+    <div class="maintenance-page__actions">
+      <button mat-stroked-button type="button" matTooltip="Reload data" (click)="onRefresh()">
+        <fa-icon [icon]="icons.refresh"></fa-icon>
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Toolbar: Tabs + Filter Toggle -->
+  <div class="maintenance-page__toolbar">
+    <nav class="maintenance-page__tabs">
+      <a routerLink="/maintenance/system-tasks" routerLinkActive="active" class="maintenance-page__tab">
+        <fa-icon [icon]="icons.systemTasks"></fa-icon>
+        System Tasks
+      </a>
+      <a routerLink="/maintenance/notifications" routerLinkActive="active" class="maintenance-page__tab">
+        <fa-icon [icon]="icons.notifications"></fa-icon>
+        Notifications
+      </a>
+    </nav>
+
+    <div class="maintenance-page__filter-toggle">
+      <button mat-stroked-button type="button" (click)="onToggleFilters()">
+        <fa-icon [icon]="icons.filter"></fa-icon>
+        {{ filtersVisible() ? 'Hide Filters' : 'Show Filters' }}
+      </button>
+      @if (hasActiveFilters()) {
+        <span class="maintenance-page__filter-badge">Filters Active</span>
+      }
+    </div>
+  </div>
+
+  <!-- Filter Panel -->
+  @if (filtersVisible() && filtersTemplate()) {
+    <section class="maintenance-page__filters">
+      <div class="maintenance-page__filter-row">
+        <ng-container *ngTemplateOutlet="filtersTemplate()"></ng-container>
+
+        <div class="maintenance-page__filter-actions">
+          <button
+            mat-icon-button
+            type="button"
+            matTooltip="Clear filters"
+            (click)="onClearFilters()"
+            [disabled]="!hasActiveFilters()"
+          >
+            <fa-icon [icon]="icons.clear"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- Content -->
+  <section class="maintenance-page__content">
+    @if (loading()) {
+      <div class="maintenance-page__loading">
+        <app-skeleton-loader variant="table" [rows]="5" [columns]="6" />
+      </div>
+    } @else if (error()) {
+      <div class="maintenance-page__error">
+        <p>{{ error() }}</p>
+        <button mat-stroked-button type="button" (click)="onRefresh()">Try Again</button>
+      </div>
+    } @else if (isEmpty()) {
+      <div class="maintenance-page__empty">
+        @if (emptyIconTemplate()) {
+          <ng-container *ngTemplateOutlet="emptyIconTemplate()"></ng-container>
+        }
+        <p>{{ emptyMessage() }}</p>
+        <span>{{ emptyHint() }}</span>
+      </div>
+    } @else {
+      <div class="maintenance-page__table-wrapper">
+        <div class="maintenance-page__table-container">
+          @if (tableTemplate()) {
+            <ng-container *ngTemplateOutlet="tableTemplate()"></ng-container>
+          }
+
+          <app-simple-paginator
+            [pageIndex]="pageIndex()"
+            [pageSize]="pageSize()"
+            [totalItems]="totalItems()"
+            (pageChange)="onPageChange($event)"
+          ></app-simple-paginator>
+        </div>
+      </div>
+    }
+  </section>
+</section>

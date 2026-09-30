@@ -1,0 +1,311 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+}
+
+.time-tracking-calendar {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  height: 100%;
+  padding: 1rem;
+  position: relative;
+}
+
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--surface-card);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-muted);
+}
+
+.toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.today-btn {
+  font-weight: 500;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.calendar-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  min-width: 200px;
+}
+
+.toolbar-center {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.total-duration {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brand-primary);
+  padding: 0.375rem 0.75rem;
+  background: var(--surface-muted);
+  border-radius: 16px;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.view-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  button {
+    min-width: auto;
+    padding: 0 0.75rem;
+
+    &.active {
+      background: var(--surface-muted);
+      color: var(--brand-primary);
+    }
+
+    fa-icon {
+      margin-right: 0.375rem;
+    }
+  }
+}
+
+.add-entry-btn {
+  fa-icon {
+    margin-right: 0.5rem;
+  }
+}
+
+.calendar-container {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface-card);
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid var(--border-muted);
+
+  // FullCalendar customizations
+  ::ng-deep {
+    .fc {
+      font-family: inherit;
+      height: 100% !important;
+    }
+
+    .fc-view-harness {
+      height: 100% !important;
+    }
+
+    .fc-scroller-harness {
+      overflow: auto !important;
+    }
+
+    .fc-theme-standard {
+      td,
+      th {
+        border-color: var(--border-muted) !important;
+      }
+    }
+
+    .fc-scrollgrid,
+    .fc-scrollgrid td,
+    .fc-scrollgrid th,
+    .fc-scrollgrid-section > td,
+    .fc-scrollgrid-section > th,
+    .fc-scrollgrid-sync-table {
+      border-color: var(--border-muted) !important;
+    }
+
+    // Header row background
+    .fc-col-header,
+    .fc-col-header-cell,
+    .fc-scrollgrid-section-header > th,
+    .fc-scrollgrid-section-header td {
+      background: var(--surface-muted) !important;
+    }
+
+    .fc-col-header-cell {
+      padding: 0.25rem 0;
+    }
+
+    .fc-col-header-cell-cushion {
+      color: var(--text-primary);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    // Corner cells and axis (time column header)
+    .fc-timegrid-axis,
+    .fc-scrollgrid-sync-inner {
+      background: var(--surface-muted);
+    }
+
+    .fc-timegrid-axis-cushion {
+      color: var(--text-secondary);
+    }
+
+    .fc-timegrid-slot-label-cushion {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+    }
+
+    .fc-timegrid-slot {
+      height: 1.75rem;
+    }
+
+    .fc-event {
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 0.8125rem;
+      padding: 2px 4px;
+      transition: transform 0.1s ease;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+
+    .fc-event-main {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    // A week column is ~120px wide, and a title like "[TSK-142] Rework the import pipeline"
+    // was being cut mid-glyph: the ellipsis on .fc-event-main never applied because the text
+    // node lives two levels down and was free to wrap. Pin the title and time to one line
+    // each so they truncate visibly; eventDidMount carries the full text in a tooltip.
+    .fc-event-time,
+    .fc-event-title {
+      min-width: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    // A 30-minute block has no room for two lines, so FullCalendar lays the time and title out as
+    // a one-line flex row instead. Flex items start at min-width:auto, so the title refused to
+    // shrink and the row clipped mid-glyph rather than truncating. Let the frame and the title
+    // container shrink, and keep the time itself intact: losing the tail of a title is readable,
+    // losing the start time is not.
+    .fc-event-main-frame,
+    .fc-event-title-container {
+      min-width: 0;
+    }
+
+    .fc-timegrid-event-short .fc-event-time {
+      flex-shrink: 0;
+    }
+
+    .fc-timegrid-now-indicator-line {
+      border-color: var(--status-error);
+      border-width: 2px;
+    }
+
+    .fc-timegrid-now-indicator-arrow {
+      border-color: var(--status-error);
+      border-top-color: transparent;
+      border-bottom-color: transparent;
+    }
+
+    .fc-highlight {
+      background: rgba(var(--brand-primary-rgb), 0.1);
+    }
+
+    .fc-day-today {
+      background: rgba(var(--brand-primary-rgb), 0.05) !important;
+
+      // Ensure header cell for today also has proper background
+      &.fc-col-header-cell {
+        background: var(--surface-muted) !important;
+      }
+    }
+
+    .fc-daygrid-day-number {
+      color: var(--text-primary);
+      text-decoration: none;
+      padding: 0.5rem;
+    }
+
+    .fc-daygrid-day-top {
+      justify-content: center;
+    }
+
+    .fc-allday-cell {
+      background: var(--surface-muted);
+    }
+
+    // Week and day view time grid
+    .fc-timegrid-col.fc-day-today {
+      background: rgba(var(--brand-primary-rgb), 0.03);
+    }
+  }
+}
+
+.saving-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--overlay-dark);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 100;
+  border-radius: 8px;
+
+  span {
+    color: white;
+    font-weight: 500;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .calendar-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .toolbar-left,
+  .toolbar-center,
+  .toolbar-right {
+    justify-content: center;
+  }
+
+  .calendar-title {
+    min-width: auto;
+    text-align: center;
+  }
+
+  .view-buttons button span {
+    display: none;
+  }
+}

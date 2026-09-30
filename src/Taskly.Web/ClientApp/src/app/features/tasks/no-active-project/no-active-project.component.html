@@ -1,0 +1,59 @@
+<div class="no-active-project">
+  <div class="card">
+    <div class="icon-container">
+      <fa-icon [icon]="icons.folder" class="main-icon"></fa-icon>
+    </div>
+
+    <h1 class="title">No Active Project</h1>
+
+    <p class="message">
+      You need to activate a project before accessing the task boards.
+      Please select a project from the list below or navigate to the home page to manage your projects.
+    </p>
+
+    @if (isLoading()) {
+      <div class="loading">
+        @for (i of [1, 2, 3]; track i) {
+          <app-skeleton-loader variant="list-item" />
+        }
+      </div>
+    } @else if (hasProjects()) {
+      <div class="projects-section">
+        <h2 class="section-title">Available Projects</h2>
+        <ul class="project-list">
+          @for (project of projects(); track project.id) {
+            <li class="project-item">
+              <button
+                type="button"
+                class="project-button"
+                (click)="activateProject(project)"
+              >
+                <fa-icon [icon]="icons.project" class="project-icon"></fa-icon>
+                <span class="project-name">{{ project.title }}</span>
+                @if (project.key) {
+                  <span class="project-key">({{ project.key }})</span>
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
+    } @else {
+      <div class="empty-projects">
+        <p>No projects available. Create a project from the home page to get started.</p>
+      </div>
+    }
+
+    <div class="actions">
+      <a routerLink="/home" class="btn btn-primary">
+        <fa-icon [icon]="icons.home"></fa-icon>
+        <span>Go to Home</span>
+      </a>
+
+      <button type="button" class="btn btn-secondary" (click)="refresh()">
+        <fa-icon [icon]="icons.refresh"></fa-icon>
+        <span>Refresh</span>
+      </button>
+    </div>
+  </div>
+</div>

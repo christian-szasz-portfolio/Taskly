@@ -1,0 +1,182 @@
+<div
+  class="skeleton"
+  [class.skeleton--animated]="animated()"
+  [class]="containerClass()"
+  role="presentation"
+  aria-hidden="true"
+>
+  @switch (variant()) {
+    <!-- Single text line -->
+    @case ('text') {
+      <div class="skeleton__line" [style]="customStyles()"></div>
+    }
+
+    <!-- Page title -->
+    @case ('title') {
+      <div class="skeleton__title" [style]="customStyles()"></div>
+    }
+
+    <!-- Multiple text lines -->
+    @case ('text-block') {
+      <div class="skeleton__text-block">
+        @for (i of lineIndices(); track i) {
+          <div class="skeleton__line" [style.width]="getLineWidth(i)"></div>
+        }
+      </div>
+    }
+
+    <!-- Avatar circle -->
+    @case ('avatar') {
+      <div class="skeleton__avatar" [style]="customStyles()"></div>
+    }
+
+    <!-- Generic card -->
+    @case ('card') {
+      <div class="skeleton__card">
+        <div class="skeleton__card-header">
+          <div class="skeleton__avatar skeleton__avatar--small"></div>
+          <div class="skeleton__card-header-text">
+            <div class="skeleton__line skeleton__line--short"></div>
+            <div class="skeleton__line skeleton__line--xs"></div>
+          </div>
+        </div>
+        <div class="skeleton__card-body">
+          <div class="skeleton__line"></div>
+          <div class="skeleton__line" style="width: 75%"></div>
+          <div class="skeleton__line" style="width: 50%"></div>
+        </div>
+      </div>
+    }
+
+    <!-- Single table row -->
+    @case ('table-row') {
+      <div class="skeleton__table-row">
+        @for (col of columnIndices(); track col) {
+          <div class="skeleton__cell"></div>
+        }
+      </div>
+    }
+
+    <!-- Full table -->
+    @case ('table') {
+      <div class="skeleton__table">
+        <div class="skeleton__table-header">
+          @for (col of columnIndices(); track col) {
+            <div class="skeleton__header-cell"></div>
+          }
+        </div>
+        <div class="skeleton__table-body">
+          @for (row of rowIndices(); track row) {
+            <div class="skeleton__table-row">
+              @for (col of columnIndices(); track col) {
+                <div class="skeleton__cell"></div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Kanban card -->
+    @case ('kanban-card') {
+      <div class="skeleton__kanban-card">
+        <div class="skeleton__line skeleton__line--short"></div>
+        <div class="skeleton__line" style="width: 80%"></div>
+        <div class="skeleton__kanban-card-footer">
+          <div class="skeleton__tag"></div>
+          <div class="skeleton__avatar skeleton__avatar--xs"></div>
+        </div>
+      </div>
+    }
+
+    <!-- Kanban column with multiple cards -->
+    @case ('kanban-column') {
+      <div class="skeleton__kanban-column">
+        <div class="skeleton__kanban-column-header">
+          <div class="skeleton__line skeleton__line--short"></div>
+          <div class="skeleton__badge"></div>
+        </div>
+        @for (i of cardIndices(); track i) {
+          <div class="skeleton__kanban-card">
+            <div class="skeleton__line skeleton__line--short"></div>
+            <div class="skeleton__line" style="width: 80%"></div>
+            <div class="skeleton__kanban-card-footer">
+              <div class="skeleton__tag"></div>
+              <div class="skeleton__avatar skeleton__avatar--xs"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Detail page layout -->
+    @case ('detail-page') {
+      <div class="skeleton__detail-page">
+        <div class="skeleton__detail-header">
+          <div class="skeleton__title"></div>
+          <div class="skeleton__actions">
+            <div class="skeleton__button"></div>
+            <div class="skeleton__button"></div>
+          </div>
+        </div>
+        <div class="skeleton__detail-content">
+          <div class="skeleton__detail-section">
+            <div class="skeleton__line skeleton__line--short"></div>
+            <div class="skeleton__line"></div>
+            <div class="skeleton__line" style="width: 85%"></div>
+            <div class="skeleton__line" style="width: 60%"></div>
+          </div>
+          <div class="skeleton__detail-section">
+            <div class="skeleton__line skeleton__line--short"></div>
+            <div class="skeleton__text-block">
+              @for (i of lineIndices(); track i) {
+                <div class="skeleton__line" [style.width]="getLineWidth(i)"></div>
+              }
+            </div>
+          </div>
+          <div class="skeleton__detail-sidebar">
+            <div class="skeleton__detail-meta">
+              <div class="skeleton__line skeleton__line--xs"></div>
+              <div class="skeleton__line skeleton__line--short"></div>
+            </div>
+            <div class="skeleton__detail-meta">
+              <div class="skeleton__line skeleton__line--xs"></div>
+              <div class="skeleton__line skeleton__line--short"></div>
+            </div>
+            <div class="skeleton__detail-meta">
+              <div class="skeleton__line skeleton__line--xs"></div>
+              <div class="skeleton__line skeleton__line--short"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Form layout -->
+    @case ('form') {
+      <div class="skeleton__form">
+        @for (i of lineIndices(); track i) {
+          <div class="skeleton__form-field">
+            <div class="skeleton__line skeleton__line--xs"></div>
+            <div class="skeleton__input"></div>
+          </div>
+        }
+        <div class="skeleton__form-actions">
+          <div class="skeleton__button"></div>
+          <div class="skeleton__button skeleton__button--outline"></div>
+        </div>
+      </div>
+    }
+
+    <!-- List item -->
+    @case ('list-item') {
+      <div class="skeleton__list-item">
+        <div class="skeleton__avatar skeleton__avatar--small"></div>
+        <div class="skeleton__list-item-content">
+          <div class="skeleton__line skeleton__line--short"></div>
+          <div class="skeleton__line skeleton__line--xs" style="width: 60%"></div>
+        </div>
+      </div>
+    }
+  }
+</div>

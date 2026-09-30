@@ -1,0 +1,236 @@
+<form
+  class="subtask-editor-form"
+  [attr.id]="formId()"
+  (submit)="submit($event)"
+  [attr.mat-dialog-content]="isDialogAppearance() ? '' : null"
+>
+  <fieldset class="editor-section">
+    <legend>General info</legend>
+    <div class="section-grid general-info-grid">
+      <mat-form-field appearance="outline" class="title-field">
+        <mat-label>Title</mat-label>
+        <input matInput [formField]="subtaskForm.title" />
+        <mat-hint align="end">{{ subtaskForm.title().value().length }}/120</mat-hint>
+        @if (hasError(subtaskForm.title, 'required')) {
+          <mat-error>Title is required.</mat-error>
+        }
+      </mat-form-field>
+      <app-date-picker-input
+        class="full-width general-info-grid__date"
+        [formField]="subtaskForm.dueAtUtc"
+        label="Due date"
+        hint="Leave blank to keep unscheduled."
+      ></app-date-picker-input>
+    </div>
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>Details</legend>
+    <div class="section-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Subtask Type</mat-label>
+        <mat-select [value]="subtaskForm.subtaskType().value()" (selectionChange)="handleSubtaskTypeChange($event)">
+          <mat-select-trigger>
+            @if (selectedSubtaskTypeOption()) {
+              <span class="subtask-type-option">
+                <fa-icon
+                  class="subtask-type-option__icon"
+                  [icon]="selectedSubtaskTypeOption()?.icon"
+                  [style.color]="selectedSubtaskTypeOption()?.color"
+                ></fa-icon>
+                <span>{{ selectedSubtaskTypeOption()?.label }}</span>
+              </span>
+            }
+          </mat-select-trigger>
+          @for (option of subtaskTypeOptions(); track option.value) {
+            <mat-option [value]="option.value">
+              <span class="subtask-type-option">
+                <fa-icon
+                  class="subtask-type-option__icon"
+                  [icon]="option.icon"
+                  [style.color]="option.color"
+                ></fa-icon>
+                <span>{{ option.label }}</span>
+              </span>
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Priority</mat-label>
+        <mat-select [value]="subtaskForm.priority().value()" (selectionChange)="handlePriorityChange($event)">
+          @for (option of priorityOptions(); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Pick the urgency that best matches.</mat-hint>
+      </mat-form-field>
+
+      @if (showResolutionField()) {
+        <mat-form-field appearance="outline">
+          <mat-label>Resolution</mat-label>
+          <mat-select [value]="subtaskForm.resolution().value()" (selectionChange)="handleResolutionChange($event)">
+            <mat-select-trigger>
+              @if (selectedResolutionOption()) {
+                <span class="resolution-option">
+                  <fa-icon
+                    class="resolution-option__icon"
+                    [icon]="selectedResolutionOption()?.icon"
+                    [style.color]="selectedResolutionOption()?.color"
+                  ></fa-icon>
+                  <span>{{ selectedResolutionOption()?.label }}</span>
+                </span>
+              }
+            </mat-select-trigger>
+            @for (option of resolutionOptions(); track option.value) {
+              <mat-option [value]="option.value">
+                <span class="resolution-option">
+                  <fa-icon
+                    class="resolution-option__icon"
+                    [icon]="option.icon"
+                    [style.color]="option.color"
+                  ></fa-icon>
+                  <span>{{ option.label }}</span>
+                </span>
+              </mat-option>
+            }
+          </mat-select>
+          <mat-hint>Set to Closed to move subtask to resolved list.</mat-hint>
+        </mat-form-field>
+      }
+    </div>
+
+    @if (componentComboOptions().length > 0) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Components</mat-label>
+        <mat-select multiple [value]="subtaskForm.components().value()" (selectionChange)="handleComponentsChange($event)">
+          @for (option of componentComboOptions(); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Select from project-defined components.</mat-hint>
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Components</mat-label>
+        <mat-chip-grid #componentGrid aria-label="Components">
+          @for (component of subtaskForm.components().value(); track component + '-' + $index) {
+            <mat-chip-row [removable]="true" (removed)="removeComponentChip(component)">
+              {{ component }}
+              <button matChipRemove type="button" aria-label="Remove component">
+                <fa-icon [icon]="icons().close" class="chip-remove-icon"></fa-icon>
+              </button>
+            </mat-chip-row>
+          }
+          <input
+            matInput
+            placeholder="Add component"
+            [matChipInputFor]="componentGrid"
+            [matChipInputSeparatorKeyCodes]="chipSeparatorKeys"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addComponentChip($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+    }
+
+    @if (labelComboOptions().length > 0) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Labels</mat-label>
+        <mat-select multiple [value]="subtaskForm.labels().value()" (selectionChange)="handleLabelsChange($event)">
+          @for (option of labelComboOptions(); track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+        <mat-hint>Select from project-defined labels.</mat-hint>
+      </mat-form-field>
+    } @else {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Labels</mat-label>
+        <mat-chip-grid #labelGrid aria-label="Labels">
+          @for (label of subtaskForm.labels().value(); track label + '-' + $index) {
+            <mat-chip-row [removable]="true" (removed)="removeLabelChip(label)">
+              {{ label }}
+              <button matChipRemove type="button" aria-label="Remove label">
+                <fa-icon [icon]="icons().close" class="chip-remove-icon"></fa-icon>
+              </button>
+            </mat-chip-row>
+          }
+          <input
+            matInput
+            placeholder="Add label"
+            [matChipInputFor]="labelGrid"
+            [matChipInputSeparatorKeyCodes]="chipSeparatorKeys"
+            [matChipInputAddOnBlur]="true"
+            (matChipInputTokenEnd)="addLabelChip($event)"
+          />
+        </mat-chip-grid>
+      </mat-form-field>
+    }
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>People</legend>
+    <div class="section-grid">
+      <app-combo-box
+        label="Assignee"
+        placeholder="Search or type a teammate"
+        [appearance]="'outline'"
+        [field]="subtaskForm.assignedTo"
+        [options]="userComboOptions()"
+        [maxLength]="256"
+        [showError]="hasError(subtaskForm.assignedTo, 'required')"
+        errorText="Assignee is required."
+      ></app-combo-box>
+      <app-combo-box
+        label="Reporter"
+        placeholder="Search or type the reporter"
+        [appearance]="'outline'"
+        [field]="subtaskForm.reporter"
+        [options]="userComboOptions()"
+        [maxLength]="256"
+      ></app-combo-box>
+    </div>
+  </fieldset>
+
+  <fieldset class="editor-section">
+    <legend>Description</legend>
+    <app-rich-text-editor
+      class="rich-editor"
+      ariaLabel="Subtask description"
+      [value]="subtaskForm.description().value()"
+      (valueChange)="handleDescriptionChange($event)"
+    ></app-rich-text-editor>
+    <div class="description-hint">{{ descriptionLength() }}/4096 characters</div>
+  </fieldset>
+
+  @if (currentSubtaskId()) {
+    <fieldset class="editor-section">
+      <legend>
+        <fa-icon [icon]="icons().attachments" class="legend-icon"></fa-icon>
+        Attachments
+      </legend>
+      <app-file-attachment-list
+        [editable]="true"
+      ></app-file-attachment-list>
+    </fieldset>
+  }
+
+  <div
+    class="subtask-editor-form__actions"
+    [attr.mat-dialog-actions]="isDialogAppearance() ? '' : null"
+    align="end"
+  >
+    <button mat-button type="button" (click)="cancel()" [disabled]="saving()">
+      {{ cancelLabel() }}
+    </button>
+    <button
+      mat-flat-button
+      color="primary"
+      type="submit"
+      [disabled]="subtaskForm().invalid() || saving()"
+    >
+      {{ saving() ? 'Saving...' : submitLabel() }}
+    </button>
+  </div>
+</form>

@@ -1,0 +1,10 @@
+// System Tasks Page Styles
+// Entity-specific styles only - layout is handled by MaintenancePageLayoutComponent
+
+@use '../styles/maintenance-page' as maintenance;
+
+// System task-specific: state badges
+@include maintenance.state-badge();
+
+// Table styles for the projected table template
+@include maintenance.table-styles();

@@ -1,0 +1,19 @@
+@if (editable()) {
+  @if (showSectionHeader()) {
+    <h2 class="file-attachment-list__header">
+      <fa-icon class="file-attachment-list__header-icon" [icon]="headerIcon()"></fa-icon>
+      <span>{{ title() }}</span>
+    </h2>
+  }
+  <section class="file-attachment-list">
+    <div class="file-attachment-list__upload-area">
+      <span [matTooltip]="uploadDisabledNote">
+        <button mat-stroked-button type="button" class="file-attachment-list__upload-button" disabled>
+          <fa-icon [icon]="uploadIcon"></fa-icon>
+          <span>Upload Files</span>
+        </button>
+      </span>
+      <p class="file-attachment-list__upload-hint">{{ uploadDisabledNote }}</p>
+    </div>
+  </section>
+}

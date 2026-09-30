@@ -1,0 +1,105 @@
+@let taskItem = task();
+<section class="detail-section">
+  <h2 class="detail-section__title">
+    <fa-icon class="detail-section__title-icon" [icon]="sectionIcons().description"></fa-icon>
+    <span>Description</span>
+  </h2>
+  @if (taskItem.description) {
+    <div class="detail-section__body" [appRichTextHtml]="taskItem.description"></div>
+  } @else {
+    <p class="detail-section__placeholder">No description provided.</p>
+  }
+</section>
+
+<section class="detail-section">
+  <h2 class="detail-section__title">
+    <fa-icon class="detail-section__title-icon" [icon]="sectionIcons().people"></fa-icon>
+    <span>People</span>
+  </h2>
+  <div class="detail-people">
+    <div class="detail-person">
+      <span class="detail-person__label">Assignee</span>
+      <span class="detail-person__value">{{ taskItem.assignedTo || 'Unassigned' }}</span>
+    </div>
+    <div class="detail-person">
+      <span class="detail-person__label">Reporter</span>
+      <span class="detail-person__value">{{ taskItem.reporter || 'Not set' }}</span>
+    </div>
+    <div class="detail-person">
+      <span class="detail-person__label">Created By</span>
+      <span class="detail-person__value">{{ taskItem.createdBy }}</span>
+    </div>
+  </div>
+</section>
+
+<section class="detail-section">
+  <h2 class="detail-section__title">
+    <fa-icon class="detail-section__title-icon" [icon]="sectionIcons().labels"></fa-icon>
+    <span>Labels</span>
+  </h2>
+  @if (taskItem.labels.length > 0) {
+    <mat-chip-set aria-label="Labels">
+      @for (label of taskItem.labels; track label + '-' + $index) {
+        <mat-chip [ngStyle]="helpers().labelChipStyle(label)">{{ label }}</mat-chip>
+      }
+    </mat-chip-set>
+  } @else {
+    <p class="detail-section__placeholder">No labels assigned.</p>
+  }
+</section>
+
+<section class="detail-section">
+  <h2 class="detail-section__title">
+    <fa-icon class="detail-section__title-icon" [icon]="sectionIcons().components"></fa-icon>
+    <span>Components</span>
+  </h2>
+  @if (taskItem.components.length > 0) {
+    <mat-chip-set aria-label="Components">
+      @for (component of taskItem.components; track component + '-' + $index) {
+        <mat-chip [ngStyle]="helpers().labelChipStyle(component)">{{ component }}</mat-chip>
+      }
+    </mat-chip-set>
+  } @else {
+    <p class="detail-section__placeholder">No components linked.</p>
+  }
+</section>
+
+<section class="detail-section">
+  <h2 class="detail-section__title">
+    <fa-icon class="detail-section__title-icon" [icon]="sectionIcons().dates"></fa-icon>
+    <span>Dates</span>
+  </h2>
+  <div class="detail-dates">
+    <div class="detail-date">
+      <span class="detail-date__label">Created</span>
+      <span class="detail-date__value">{{ taskItem.createdAtUtc | date: "dd.MM.yyyy HH:mm:ss 'UTC'" : 'UTC' }}</span>
+    </div>
+    @if (taskItem.updatedAtUtc) {
+      <div class="detail-date">
+        <span class="detail-date__label">Updated</span>
+        <span class="detail-date__value">{{ taskItem.updatedAtUtc | date: "dd.MM.yyyy HH:mm:ss 'UTC'" : 'UTC' }}</span>
+      </div>
+    }
+    @if (taskItem.dueAtUtc) {
+      <div class="detail-date">
+        <span class="detail-date__label">Due</span>
+        <span class="detail-date__value">{{ taskItem.dueAtUtc | date: "dd.MM.yyyy HH:mm:ss 'UTC'" : 'UTC' }}</span>
+      </div>
+    }
+    @if (taskItem.completedAtUtc) {
+      <div class="detail-date">
+        <span class="detail-date__label">Completed</span>
+        <span class="detail-date__value">{{ taskItem.completedAtUtc | date: "dd.MM.yyyy HH:mm:ss 'UTC'" : 'UTC' }}</span>
+      </div>
+    }
+  </div>
+</section>
+
+@if (sectionIcons().attachments) {
+  <app-file-attachment-list
+    class="detail-section"
+    [editable]="editable()"
+    [showSectionHeader]="true"
+    [headerIcon]="sectionIcons().attachments!"
+  ></app-file-attachment-list>
+}

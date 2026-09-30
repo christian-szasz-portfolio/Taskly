@@ -1,0 +1,78 @@
+<section class="home-page">
+  <header class="home-page__welcome">
+    <div class="welcome-content">
+      <div class="welcome-text">
+        <p class="welcome-eyebrow">Welcome back</p>
+        <h1>Hello, {{ userName() }}!</h1>
+        <p class="welcome-body">
+          Manage your projects and stay on top of your task. Organize your tasks
+          and track progress all in one place.
+        </p>
+        <div class="welcome-import">
+          <span [matTooltip]="disabledNotes.importProject">
+            <button mat-flat-button type="button" class="import-button" disabled>
+              <fa-icon [icon]="icons().import" class="import-button__icon"></fa-icon>
+              <span class="import-button__text">Import project</span>
+            </button>
+          </span>
+        </div>
+      </div>
+      <div class="welcome-actions">
+        <div class="welcome-actions__row">
+          <div class="notification-badge">
+            <fa-icon [icon]="icons().notifications" class="notification-icon"></fa-icon>
+            @if (notificationCount() > 0) {
+              <span class="badge">{{ notificationCount() }}</span>
+            }
+            <span class="notification-label">{{ notificationCount() }} active {{ notificationCount() === 1 ? 'notification' : 'notifications' }}</span>
+          </div>
+          <button
+            mat-icon-button
+            type="button"
+            class="preferences-button"
+            matTooltip="Preferences"
+            (click)="openPreferencesDialog()"
+          >
+            <fa-icon [icon]="icons().preferences"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="home-page__projects">
+    <header class="section-header">
+      <div class="section-header__title">
+        <h2>Your Projects</h2>
+        <p>Projects you own and manage</p>
+      </div>
+      <div class="section-header__actions">
+        <span [matTooltip]="disabledNotes.createProject">
+          <button
+            mat-mini-fab
+            color="primary"
+            type="button"
+            aria-label="Create new project"
+            disabled
+          >
+            <fa-icon [icon]="icons().addProject"></fa-icon>
+          </button>
+        </span>
+      </div>
+    </header>
+
+    @if (!isEmpty()) {
+      <app-project-list
+        [projects]="projects()"
+        (activateProject)="handleActivateProject($event)"
+        (deactivateProject)="handleDeactivateProject($event)"
+      />
+    } @else {
+      <app-empty-state
+        [icon]="icons().activity"
+        title="No projects yet"
+        hint="The seeded demo projects appear here."
+      />
+    }
+  </section>
+</section>

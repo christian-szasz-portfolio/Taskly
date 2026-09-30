@@ -1,0 +1,25 @@
+<app-task-catalog-page
+  eyebrow="Epic registry"
+  title="Keep initiatives aligned"
+  description="Scan every epic in a single, focused surface so squads can open details without losing their current context."
+  [theme]="CatalogTheme.Indigo"
+  [isEmpty]="isEmpty()"
+  emptyTitle="No epics yet."
+  emptyHint="Create an epic from the kanban board to seed this view."
+  [boardRoute]="boardRoute()"
+  (refreshed)="refresh()"
+>
+  @for (epic of epicItems(); track epic.id) {
+    <app-expandable-card
+      [cardKey]="epic.issueKey"
+      [persistenceKey]="epic.issueKey ?? epic.id"
+      [title]="epic.title"
+      [theme]="CardTheme.Indigo"
+      [hasDetails]="hasEpicDetails(epic)"
+      [defaultExpanded]="false"
+      (opened)="openEpic(epic)"
+    >
+      <app-task-card-details [task]="epic" />
+    </app-expandable-card>
+  }
+</app-task-catalog-page>

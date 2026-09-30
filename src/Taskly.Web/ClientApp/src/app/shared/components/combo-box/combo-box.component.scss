@@ -1,0 +1,65 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.combo-box {
+  width: 100%;
+}
+
+.combo-box__suffix {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  button[mat-icon-button] {
+    --mdc-icon-button-state-layer-size: 32px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+    line-height: 0;
+
+    fa-icon {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+  }
+}
+
+.combo-box__caret {
+  font-size: 0.85rem;
+  color: var(--text-tertiary);
+}
+
+.combo-box__option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  width: 100%;
+}
+
+.combo-box__description {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+:host ::ng-deep .combo-box__panel.mdc-menu-surface {
+  position: relative;
+  overflow: hidden;
+  padding-left: 0.75rem;
+}
+
+:host ::ng-deep .combo-box__panel.mdc-menu-surface::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent-emerald), var(--status-success-dark));
+}

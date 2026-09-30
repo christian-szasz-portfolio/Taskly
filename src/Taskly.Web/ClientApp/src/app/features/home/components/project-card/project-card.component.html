@@ -1,0 +1,106 @@
+<article class="project-card" [class.project-card--expanded]="isExpanded()" [class.project-card--active]="isActive()">
+  <div class="project-card__header" (click)="toggleExpanded($event)">
+    <div class="project-card__primary">
+      <div class="project-card__title-row">
+        <span class="project-card__key">{{ projectKey() }}</span>
+        <div class="project-card__status" [class.project-card__status--active]="isActive()">
+          <span class="status-bullet"></span>
+          <span class="status-label">{{ statusLabel() }}</span>
+        </div>
+      </div>
+      <h3>{{ project().title }}</h3>
+    </div>
+    <div class="project-card__actions">
+      <button
+        mat-icon-button
+        type="button"
+        class="project-card__activate"
+        [class.project-card__activate--active]="isActive()"
+        [attr.aria-label]="isActive() ? 'Deactivate project' : 'Activate project'"
+        [matTooltip]="activateTooltip()"
+        (click)="handleActivateToggle($event)"
+      >
+        <fa-icon [icon]="icons().power"></fa-icon>
+      </button>
+      <span [matTooltip]="editDisabledNote">
+        <button
+          mat-icon-button
+          type="button"
+          class="project-card__edit"
+          aria-label="Edit project"
+          disabled
+        >
+          <fa-icon [icon]="icons().edit"></fa-icon>
+        </button>
+      </span>
+      @if (hasDetails()) {
+        <button
+          mat-icon-button
+          type="button"
+          class="project-card__toggle"
+          [attr.aria-label]="isExpanded() ? 'Collapse details' : 'Expand details'"
+          [matTooltip]="isExpanded() ? 'Collapse details' : 'Expand details'"
+          (click)="toggleExpanded($event)"
+        >
+          <fa-icon [icon]="isExpanded() ? icons().collapse : icons().expand"></fa-icon>
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (isExpanded() && hasDetails()) {
+    <div class="project-card__details">
+      @if (project().description) {
+        <div class="detail-row detail-row--description">
+          <p [innerHTML]="project().description"></p>
+        </div>
+      }
+
+      <div class="detail-grid">
+        @if (project().owner) {
+          <div class="detail-item">
+            <fa-icon [icon]="icons().owner" class="detail-icon"></fa-icon>
+            <span class="detail-label">Owner</span>
+            <span class="detail-value">{{ project().owner }}</span>
+          </div>
+        }
+
+        @if (formattedDueDate()) {
+          <div class="detail-item">
+            <fa-icon [icon]="icons().dueDate" class="detail-icon"></fa-icon>
+            <span class="detail-label">Due Date</span>
+            <span class="detail-value">{{ formattedDueDate() }}</span>
+          </div>
+        }
+      </div>
+
+      @if (project().labels.length > 0) {
+        <div class="detail-row">
+          <div class="detail-header">
+            <fa-icon [icon]="icons().labels" class="detail-icon"></fa-icon>
+            <span class="detail-label">Labels</span>
+          </div>
+          <div class="chip-list">
+            @for (label of project().labels; track label) {
+              <span class="chip chip--label">{{ label }}</span>
+            }
+          </div>
+        </div>
+      }
+
+      @if (project().components.length > 0) {
+        <div class="detail-row">
+          <div class="detail-header">
+            <fa-icon [icon]="icons().components" class="detail-icon"></fa-icon>
+            <span class="detail-label">Components</span>
+          </div>
+          <div class="chip-list">
+            @for (component of project().components; track component) {
+              <span class="chip chip--component">{{ component }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</article>

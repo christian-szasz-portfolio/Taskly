@@ -1,0 +1,49 @@
+@let taskItem = task();
+@let subtask = isSubtask();
+<section class="task-detail-page__summary" aria-label="Task summary">
+  <article class="summary-card">
+    <span class="summary-card__label">Status</span>
+    <span class="summary-card__value summary-card__value--status" [style.color]="helpers().statusColor(taskItem.status)">
+      <fa-icon class="summary-card__icon" [icon]="helpers().statusIcon(taskItem.status)"></fa-icon>
+      {{ helpers().statusToken(taskItem.status) }}
+    </span>
+  </article>
+  <article class="summary-card">
+    <span class="summary-card__label">Priority</span>
+    <span class="summary-card__value summary-card__value--priority" [style.color]="helpers().priorityColor(taskItem.priority)">
+      <fa-icon class="summary-card__icon" [icon]="helpers().priorityIcon(taskItem.priority)"></fa-icon>
+      {{ helpers().priorityToken(taskItem.priority) }}
+    </span>
+  </article>
+  <article class="summary-card">
+    @if (subtask) {
+      <span class="summary-card__label">Subtask Type</span>
+      <span class="summary-card__value summary-card__value--type" [style.color]="helpers().subtaskTypeColor($any(taskItem).subtaskType)">
+        <fa-icon class="summary-card__icon" [icon]="helpers().subtaskTypeIcon($any(taskItem).subtaskType)"></fa-icon>
+        {{ helpers().subtaskTypeToken($any(taskItem).subtaskType) }}
+      </span>
+    } @else {
+      <span class="summary-card__label">Issue Type</span>
+      <span class="summary-card__value summary-card__value--type" [style.color]="helpers().issueTypeColor($any(taskItem).issueType)">
+        <fa-icon class="summary-card__icon" [icon]="helpers().issueTypeIcon($any(taskItem).issueType)"></fa-icon>
+        {{ helpers().issueTypeToken($any(taskItem).issueType) }}
+      </span>
+    }
+  </article>
+  <article class="summary-card">
+    <span class="summary-card__label">Resolution</span>
+    <span class="summary-card__value summary-card__value--resolution" [style.color]="helpers().resolutionColor(taskItem.resolution)">
+      <fa-icon class="summary-card__icon" [icon]="helpers().resolutionIcon(taskItem.resolution)"></fa-icon>
+      {{ helpers().resolutionToken(taskItem.resolution) }}
+    </span>
+  </article>
+  @if (formattedTimeSpent()) {
+    <article class="summary-card">
+      <span class="summary-card__label">Time Spent</span>
+      <span class="summary-card__value summary-card__value--time">
+        <fa-icon class="summary-card__icon" [icon]="clockIcon"></fa-icon>
+        {{ formattedTimeSpent() }}
+      </span>
+    </article>
+  }
+</section>

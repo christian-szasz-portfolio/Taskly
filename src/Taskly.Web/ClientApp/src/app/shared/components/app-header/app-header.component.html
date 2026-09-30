@@ -1,0 +1,90 @@
+<header class="app-shell__topbar" role="banner">
+	<div class="topbar__brand" aria-label="Taskly navigation">
+		<img class="brand-logo" src="favicon.svg" alt="" aria-hidden="true" />
+		<div class="brand-copy">
+			<p class="brand-title">Taskly</p>
+		</div>
+	</div>
+	<app-primary-nav [links]="navLinks()"></app-primary-nav>
+	<div class="topbar__actions">
+		<!-- Light / Dark theme toggle -->
+		<div class="theme-toggle" [matTooltip]="themeToggleLabel()">
+			<fa-icon [icon]="lightThemeIcon" class="theme-toggle__icon" aria-hidden="true"></fa-icon>
+			<mat-slide-toggle
+				class="theme-toggle__switch"
+				color="primary"
+				[checked]="isDarkMode()"
+				(change)="toggleTheme()"
+				[aria-label]="themeToggleLabel()"
+			></mat-slide-toggle>
+			<fa-icon [icon]="darkThemeIcon" class="theme-toggle__icon" aria-hidden="true"></fa-icon>
+		</div>
+
+		<!-- Notification Bell with Badge and Dropdown -->
+		<button
+			mat-icon-button
+			type="button"
+			aria-label="Notifications"
+			[matMenuTriggerFor]="notificationMenu"
+			[matBadge]="badgeText()"
+			[matBadgeHidden]="!hasUnread()"
+			matBadgeColor="warn"
+			matBadgeSize="small"
+		>
+			<fa-icon [icon]="notificationIcon"></fa-icon>
+		</button>
+
+		<!-- Notification Dropdown Menu -->
+		<mat-menu #notificationMenu="matMenu" class="notification-menu" xPosition="before">
+			<div class="notification-header" (click)="$event.stopPropagation()">
+				<span class="notification-header__title">Notifications</span>
+				<div class="notification-header__status">
+					@if (hasUnread() && canWrite()) {
+						<button type="button" class="mark-all-btn" (click)="markAllAsRead()" title="Mark all as read">
+							<fa-icon [icon]="markAllReadIcon"></fa-icon>
+						</button>
+					}
+				</div>
+			</div>
+			<mat-divider></mat-divider>
+
+			<div class="notification-list" (click)="$event.stopPropagation()">
+				@if (unreadNotifications().length === 0) {
+					<div class="notification-empty">
+						<p>No notifications</p>
+					</div>
+				} @else {
+					@for (notification of unreadNotifications(); track notification.id) {
+						<div
+							class="notification-item"
+							[class.notification-item--unread]="!notification.isRead"
+							[ngClass]="getTypeClass(notification.type)"
+						>
+							<div class="notification-item__icon">
+								@if (!notification.isRead) {
+									<fa-icon [icon]="unreadDotIcon" class="unread-dot"></fa-icon>
+								}
+							</div>
+							<div class="notification-item__content">
+								<span class="notification-item__title">{{ notification.title }}</span>
+								@if (notification.message) {
+									<span class="notification-item__message">{{ notification.message }}</span>
+								}
+								<span class="notification-item__time">{{ formatTime(notification.createdAtUtc) }}</span>
+							</div>
+							<div class="notification-item__actions">
+								@if (!notification.isRead && canWrite()) {
+									<button type="button" class="action-btn" (click)="markAsRead(notification.id, $event)" title="Mark as read">
+										<fa-icon [icon]="markReadIcon"></fa-icon>
+									</button>
+								}
+							</div>
+						</div>
+					}
+				}
+			</div>
+		</mat-menu>
+
+		<app-account-menu [items]="accountMenuItems" [icon]="accountIcon" (itemSelected)="onAccountMenuItemSelected($event)"></app-account-menu>
+	</div>
+</header>

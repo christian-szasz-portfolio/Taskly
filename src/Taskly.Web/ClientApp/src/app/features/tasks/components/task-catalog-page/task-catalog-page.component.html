@@ -1,0 +1,30 @@
+<section class="catalog-page" aria-live="polite">
+  <header class="catalog-page__hero" [class]="'catalog-page__hero--' + theme()">
+    <div>
+      <p class="catalog-page__eyebrow">{{ eyebrow() }}</p>
+      <h1>{{ title() }}</h1>
+      <p class="catalog-page__body">{{ description() }}</p>
+    </div>
+    <div class="catalog-page__actions">
+      <button mat-stroked-button color="primary" type="button" matTooltip="Reload items" (click)="refresh()">
+        <fa-icon [icon]="refreshIcon"></fa-icon>
+        Refresh
+      </button>
+      <button mat-raised-button color="accent" type="button" matTooltip="Return to Kanban board" [routerLink]="boardRoute()">
+        <fa-icon [icon]="boardIcon"></fa-icon>
+        Back to Board
+      </button>
+    </div>
+  </header>
+
+  @if (!isEmpty()) {
+    <section class="catalog-list">
+      <ng-content></ng-content>
+    </section>
+  } @else {
+    <div class="catalog-empty">
+      <p>{{ emptyTitle() }}</p>
+      <span>{{ emptyHint() }}</span>
+    </div>
+  }
+</section>

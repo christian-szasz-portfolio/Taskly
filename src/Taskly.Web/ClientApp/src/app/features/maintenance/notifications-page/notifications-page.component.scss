@@ -1,0 +1,11 @@
+// Notifications Page Styles
+// Entity-specific styles only - layout is handled by MaintenancePageLayoutComponent
+
+@use '../styles/maintenance-page' as maintenance;
+
+// Notification-specific: type badges and read status
+@include maintenance.type-badge();
+@include maintenance.read-status();
+
+// Table styles for the projected table template
+@include maintenance.table-styles();

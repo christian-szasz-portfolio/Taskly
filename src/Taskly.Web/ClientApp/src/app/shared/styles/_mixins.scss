@@ -1,0 +1,407 @@
+// =============================================================================
+// Shared SCSS Mixins
+// =============================================================================
+// Import with: @use 'app/shared/styles/mixins' as mixins;
+// Or from component: @use '../../../shared/styles/mixins' as mixins;
+
+// =============================================================================
+// Scrollbar Styling
+// =============================================================================
+
+/// Custom scrollbar styling mixin
+/// @param {string} $direction - 'vertical' or 'horizontal'
+/// @param {px} $size - scrollbar width/height (default: 8px)
+@mixin custom-scrollbar($direction: 'vertical', $size: 8px) {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+
+  @if $direction == 'vertical' {
+    &::-webkit-scrollbar {
+      width: $size;
+      background-color: transparent;
+    }
+  } @else {
+    &::-webkit-scrollbar {
+      height: $size;
+      background-color: transparent;
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb);
+    border-radius: 999px;
+    transition: background-color 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &:hover {
+    scrollbar-color: var(--scrollbar-thumb-hover) transparent;
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb-hover);
+    }
+  }
+
+  &::-webkit-scrollbar-thumb:active {
+    background-color: var(--scrollbar-thumb-active);
+  }
+}
+
+// =============================================================================
+// Dialog Styling
+// =============================================================================
+
+/// Dialog title with icon styling
+@mixin dialog-title-with-icon() {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 1rem 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-muted);
+
+  fa-icon {
+    color: var(--brand-primary);
+  }
+}
+
+/// Dialog content padding reset (for sidebar layouts)
+@mixin dialog-content-no-padding() {
+  padding: 0 !important;
+  background: var(--dialog-bg);
+}
+
+// =============================================================================
+// Sidebar Menu Styling
+// =============================================================================
+
+/// Sidebar navigation menu container
+/// @param {px} $width - menu width (default: 180px)
+@mixin sidebar-menu($width: 180px) {
+  display: flex;
+  flex-direction: column;
+  width: $width;
+  background-color: var(--surface-muted);
+  border-right: 1px solid var(--border-muted);
+  padding: 0.5rem 0;
+}
+
+/// Sidebar menu item base styling
+@mixin sidebar-menu-item() {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: left;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+
+  &:hover {
+    background-color: var(--hover-overlay);
+    color: var(--text-primary);
+  }
+
+  fa-icon {
+    width: 1.25rem;
+    text-align: center;
+  }
+}
+
+/// Sidebar menu item active state
+@mixin sidebar-menu-item-active() {
+  background-color: rgba(var(--brand-primary-rgb), 0.1);
+  color: var(--brand-primary);
+  border-left-color: var(--brand-primary);
+
+  fa-icon {
+    color: var(--brand-primary);
+  }
+}
+
+/// Sidebar menu responsive (horizontal layout)
+@mixin sidebar-menu-horizontal() {
+  width: 100%;
+  flex-direction: row;
+  overflow-x: auto;
+  border-right: none;
+  border-bottom: 1px solid var(--border-muted);
+}
+
+/// Sidebar menu item horizontal active state
+@mixin sidebar-menu-item-horizontal-active() {
+  flex-shrink: 0;
+  border-left: none;
+  border-bottom: 3px solid transparent;
+
+  &--active {
+    border-left-color: transparent;
+    border-bottom-color: var(--brand-primary);
+  }
+}
+
+// =============================================================================
+// Loading States
+// =============================================================================
+
+/// Loading container styling
+@mixin loading-container() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem;
+  color: var(--text-secondary);
+}
+
+/// Full-page loading overlay
+@mixin loading-overlay() {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(var(--text-primary-rgb), 0.05);
+  backdrop-filter: blur(2px);
+  z-index: 10;
+}
+
+// =============================================================================
+// Empty States
+// =============================================================================
+
+/// Empty state container styling
+@mixin empty-state() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+/// Empty state icon styling
+@mixin empty-state-icon($size: 3rem) {
+  font-size: $size;
+  color: var(--text-tertiary);
+  margin-bottom: 0.5rem;
+}
+
+/// Empty state title styling
+@mixin empty-state-title() {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/// Empty state message styling
+@mixin empty-state-message() {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+// =============================================================================
+// Card Styling
+// =============================================================================
+
+/// Base card styling
+@mixin card-base() {
+  background: var(--surface-card);
+  border: 1px solid var(--border-muted);
+  border-radius: 0.75rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/// Card hover effect
+@mixin card-hover() {
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--border-muted);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+// =============================================================================
+// Button Styling
+// =============================================================================
+
+/// Icon button base styling
+@mixin icon-button($size: 2rem) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: var(--hover-overlay);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+  }
+}
+
+/// Button spinner styling (for loading states)
+@mixin button-spinner() {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  mat-spinner {
+    display: inline-block;
+  }
+}
+
+// =============================================================================
+// Form Styling
+// =============================================================================
+
+/// Form container with scrollable content
+@mixin form-scrollable($max-height: 70vh) {
+  max-height: $max-height;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
+  @include custom-scrollbar('vertical', 6px);
+}
+
+/// Form section styling
+@mixin form-section() {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 0;
+
+  &:not(:last-child) {
+    border-bottom: 1px solid var(--border-subtle);
+  }
+}
+
+/// Form section header
+@mixin form-section-header() {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+
+  fa-icon {
+    color: var(--brand-primary);
+  }
+}
+
+// =============================================================================
+// Badge Styling
+// =============================================================================
+
+/// Base badge styling
+@mixin badge($bg-color: var(--brand-primary), $text-color: var(--text-on-brand)) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: $text-color;
+  background-color: $bg-color;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/// Issue key badge styling
+@mixin issue-key-badge() {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  color: var(--brand-primary);
+  background-color: rgba(var(--brand-primary-rgb), 0.08);
+  border-radius: 0.375rem;
+  border: 1px solid rgba(var(--brand-primary-rgb), 0.15);
+  letter-spacing: 0.025em;
+}
+
+// =============================================================================
+// Password Toggle Button (Auth forms)
+// =============================================================================
+
+/// Password visibility toggle button styling
+@mixin password-toggle-button() {
+  ::ng-deep {
+    .mat-mdc-form-field-icon-suffix {
+      button {
+        color: var(--text-secondary, rgba(0, 0, 0, 0.54));
+
+        &:hover {
+          color: var(--text-primary, rgba(0, 0, 0, 0.87));
+        }
+
+        fa-icon {
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// Responsive Utilities
+// =============================================================================
+
+/// Hide on mobile
+@mixin hide-on-mobile($breakpoint: 768px) {
+  @media (max-width: $breakpoint) {
+    display: none !important;
+  }
+}
+
+/// Show only on mobile
+@mixin show-on-mobile($breakpoint: 768px) {
+  display: none !important;
+
+  @media (max-width: $breakpoint) {
+    display: block !important;
+  }
+}
+
+/// Stack on mobile (flex column)
+@mixin stack-on-mobile($breakpoint: 768px, $gap: 0.5rem) {
+  @media (max-width: $breakpoint) {
+    flex-direction: column;
+    gap: $gap;
+  }
+}

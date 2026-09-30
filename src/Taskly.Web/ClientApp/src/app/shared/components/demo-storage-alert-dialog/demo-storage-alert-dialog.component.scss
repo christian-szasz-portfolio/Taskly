@@ -1,0 +1,21 @@
+.warning-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-align: center;
+  align-self: center;
+  padding-top: 24px;
+  color: var(--status-warning);
+}
+
+mat-dialog-content {
+  min-width: 480px;
+  max-width: 560px;
+  min-height: 80px;
+}
+
+.warning-message {
+  margin: 0.5rem 0 1rem 0;
+  color: var(--text-secondary);
+  text-align: center;
+}

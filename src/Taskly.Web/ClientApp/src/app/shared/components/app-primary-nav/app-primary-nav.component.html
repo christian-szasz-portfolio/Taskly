@@ -1,0 +1,16 @@
+<nav class="topbar__menu" aria-label="Primary navigation">
+	@for (link of links(); track link.label; let last = $last) {
+		<a
+			[routerLink]="link.route"
+			[queryParams]="link.queryParams ?? null"
+			routerLinkActive="is-active"
+			[routerLinkActiveOptions]="{ exact: true }"
+		>
+			<fa-icon [icon]="link.icon" size="sm"></fa-icon>
+			<span>{{ link.label }}</span>
+		</a>
+		@if (!last) {
+			<span class="menu__divider" aria-hidden="true">|</span>
+		}
+	}
+</nav>

@@ -1,0 +1,9 @@
+# Demo backend scaffolding: relax a few StyleCop layout rules that are noise for
+# DTO records and intentionally co-located provider/manager pairs.
+[*.cs]
+dotnet_diagnostic.SA1402.severity = none   # multiple types per file (co-located pairs)
+dotnet_diagnostic.SA1649.severity = none   # file name matches first type
+dotnet_diagnostic.SA1516.severity = none   # blank line between elements
+dotnet_diagnostic.SA1514.severity = none   # blank line before doc header
+dotnet_diagnostic.SA1512.severity = none   # blank line after single-line comment
+dotnet_diagnostic.SA1623.severity = none   # property doc must begin with 'Gets'

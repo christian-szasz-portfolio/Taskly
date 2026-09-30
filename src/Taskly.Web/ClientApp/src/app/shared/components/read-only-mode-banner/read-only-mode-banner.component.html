@@ -1,0 +1,42 @@
+@if (shouldShow()) {
+  <div class="readonly-banner" role="alert" aria-live="polite">
+    <div class="readonly-banner__content">
+      <fa-icon [icon]="icons.lock" class="readonly-banner__icon"></fa-icon>
+      <span class="readonly-banner__text">
+        You are in read-only mode
+      </span>
+      <button
+        type="button"
+        class="readonly-banner__toggle"
+        (click)="toggleExpanded()"
+        [attr.aria-expanded]="isExpanded()"
+        aria-controls="readonly-details"
+      >
+        <span>What does this mean?</span>
+        <fa-icon
+          [icon]="isExpanded() ? icons.chevronUp : icons.chevronDown"
+          class="readonly-banner__chevron"
+        ></fa-icon>
+      </button>
+    </div>
+
+    @if (isExpanded()) {
+      <div id="readonly-details" class="readonly-banner__details">
+        <p class="readonly-banner__details-intro">
+          Your account has a read-only license. The following actions are restricted:
+        </p>
+        <ul class="readonly-banner__list">
+          <li>Creating new task items, subtasks, or projects</li>
+          <li>Editing existing task items or subtasks</li>
+          <li>Dragging and dropping items on the Kanban board</li>
+          <li>Moving items between backlog and board</li>
+          <li>Changing status, priority, or other properties</li>
+          <li>Deleting any items</li>
+        </ul>
+        <p class="readonly-banner__details-footer">
+          For full access, please reset your workspace and log in again selecting full access license.
+        </p>
+      </div>
+    }
+  </div>
+}

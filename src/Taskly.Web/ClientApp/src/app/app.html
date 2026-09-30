@@ -1,0 +1,18 @@
+@if (!isChromelessRoute()) {
+	<div class="app-shell">
+		<app-trial-warning-banner />
+		<app-header />
+		<app-read-only-mode-banner />
+		<main class="app-shell__main" role="main">
+			<section class="app-shell__content">
+				<router-outlet />
+			</section>
+		</main>
+
+		<footer class="app-shell__footer">
+			© {{ currentYear() }} Taskly. All rights reserved.
+		</footer>
+	</div>
+} @else {
+	<router-outlet />
+}

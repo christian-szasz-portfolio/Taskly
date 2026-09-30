@@ -1,0 +1,138 @@
+@let item = task();
+
+<section class="task-detail-page" aria-live="polite">
+  @if (loading()) {
+    <div class="task-detail-page__skeleton">
+      <app-skeleton-loader variant="detail-page" [lines]="4" />
+    </div>
+  } @else if (error()) {
+    <div class="task-detail-page__state task-detail-page__state--error" role="alert">
+      <p>{{ error() }}</p>
+      <button mat-stroked-button color="primary" type="button" (click)="reload()">Retry</button>
+    </div>
+  } @else if (!item) {
+    <div class="task-detail-page__state" role="status">Task not found.</div>
+  } @else {
+    <header class="task-detail-page__header">
+      <div>
+        @if (item.issueKey) {
+          <span class="task-detail-page__issue-key">{{ item.issueKey }}</span>
+        }
+        <h1 class="task-detail-page__title">{{ item.title }}</h1>
+      </div>
+      <div class="task-detail-page__actions">
+        @if (canHaveSubtasks()) {
+          <span [matTooltip]="createSubtaskDisabledNote">
+            <button
+              mat-icon-button
+              type="button"
+              aria-label="Create subtask"
+              disabled
+            >
+              <fa-icon [icon]="subtaskIcon"></fa-icon>
+            </button>
+          </span>
+        }
+        @if (!isEditMode()) {
+          <span [matTooltip]="editTooltip()">
+            <button
+              mat-icon-button
+              color="primary"
+              type="button"
+              aria-label="Edit task"
+              [disabled]="!canWrite()"
+              (click)="goToMode('edit')"
+            >
+              <fa-icon [icon]="actionIcons().edit"></fa-icon>
+            </button>
+          </span>
+        } @else {
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="View task"
+            matTooltip="View"
+            (click)="goToMode('view')"
+          >
+            <fa-icon [icon]="actionIcons().view"></fa-icon>
+          </button>
+        }
+      </div>
+    </header>
+
+    @if (!isEditMode()) {
+      <app-task-summary-cards [task]="item" [helpers]="helpers"></app-task-summary-cards>
+
+      <app-task-detail-sections
+        [task]="item"
+        [helpers]="helpers"
+        [sectionIcons]="sectionIcons()"
+      ></app-task-detail-sections>
+
+      <!-- Comments Section -->
+      <app-comment-section
+        [targetId]="item.id"
+        [targetType]="commentTarget.Task"
+        [readonly]="!canWrite()"
+      ></app-comment-section>
+
+      @if (item.issueType === issueType.Epic) {
+        <section class="epic-relations" aria-live="polite">
+          <header class="epic-relations__header">
+            <div>
+              <p class="epic-relations__eyebrow">Epic scope</p>
+              <h2>Work items under this epic</h2>
+              <p class="epic-relations__body">
+                Showing every task whose epic key matches {{ item.issueKey || 'this record' }}.
+              </p>
+            </div>
+            <span class="epic-relations__badge">{{ epicChildren().length }}</span>
+          </header>
+
+          @if (epicChildrenLoading()) {
+            <div class="epic-relations__skeleton">
+              @for (i of [1, 2, 3]; track i) {
+                <app-skeleton-loader variant="list-item" />
+              }
+            </div>
+          } @else if (epicChildren().length === 0) {
+            <div class="epic-relations__state">No tasks currently reference this epic.</div>
+          } @else {
+            <ul class="epic-relations__list">
+              @for (child of epicChildren(); track child.id) {
+                <li class="epic-relations__item">
+                  <div class="epic-relations__info">
+                    <span class="epic-relations__key">{{ child.issueKey || 'Unkeyed' }}</span>
+                    <p class="epic-relations__title">{{ child.title }}</p>
+                  </div>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    aria-label="Open task in new tab"
+                    matTooltip="Open in new tab"
+                    (click)="openChildTask(child)"
+                  >
+                    <fa-icon [icon]="linkIcon"></fa-icon>
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+        </section>
+      }
+    } @else {
+      <section class="task-detail-page__editor" aria-label="Edit task">
+        <app-task-editor-form
+          appearance="page"
+          formId="task-detail-editor"
+          [task]="item"
+          [submitLabel]="'Save changes'"
+          [cancelLabel]="'Discard'"
+          [saving]="saving()"
+          (submitted)="onEditSubmitted($event)"
+          (cancelled)="onEditCancelled()"
+        ></app-task-editor-form>
+      </section>
+    }
+  }
+</section>

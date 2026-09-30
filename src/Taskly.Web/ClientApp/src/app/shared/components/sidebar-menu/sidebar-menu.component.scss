@@ -1,0 +1,58 @@
+:host {
+  border-right: 1px solid var(--border-muted);
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  min-width: 180px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.15s ease;
+
+    &:hover:not(:disabled) {
+      background: var(--hover-overlay);
+      color: var(--text-primary);
+    }
+
+    &--active {
+      background: rgba(var(--brand-primary-rgb), 0.1);
+      color: var(--brand-primary);
+
+      &:hover:not(:disabled) {
+        background: rgba(var(--brand-primary-rgb), 0.15);
+        color: var(--brand-primary);
+      }
+    }
+
+    &--disabled,
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    fa-icon {
+      font-size: 1rem;
+      width: 1.25rem;
+      text-align: center;
+    }
+
+    span {
+      flex: 1;
+    }
+  }
+}

@@ -1,0 +1,43 @@
+diff --git a/node_modules/@analogjs/vite-plugin-nitro/src/lib/vite-plugin-nitro.js b/node_modules/@analogjs/vite-plugin-nitro/src/lib/vite-plugin-nitro.js
+index 8e1970a..456edc3 100644
+--- a/node_modules/@analogjs/vite-plugin-nitro/src/lib/vite-plugin-nitro.js
++++ b/node_modules/@analogjs/vite-plugin-nitro/src/lib/vite-plugin-nitro.js
+@@ -18,7 +18,7 @@ import { getMatchingContentFilesWithFrontMatter } from './utils/get-content-file
+ import { ssrRenderer, ssrStreamRenderer, clientRenderer, apiMiddleware, } from './utils/renderers.js';
+ import { expandRoutesWithLocales, createI18nPostRenderingHook, } from './utils/i18n-prerender.js';
+ const isWindows = platform() === 'win32';
+-const filePrefix = isWindows ? 'file:///' : '';
++const filePrefix = '';
+ let clientOutputPath = '';
+ const __filename = fileURLToPath(import.meta.url);
+ const __dirname = dirname(__filename);
+@@ -344,12 +344,12 @@ export function nitro(options, nitroOptions) {
+                             }
+                             await Promise.all(builds);
+                             let ssrEntryPath = resolve(options?.ssrBuildDir ||
+-                                resolve(workspaceRoot, 'dist', rootDir, `ssr`), `main.server${filePrefix ? '.js' : ''}`);
++                                resolve(workspaceRoot, 'dist', rootDir, `ssr`), `main.server${isWindows ? ".js" : ""}`);
+                             // add check for main.server.mjs fallback on Windows
+                             if (isWindows && !existsSync(ssrEntryPath)) {
+                                 ssrEntryPath = ssrEntryPath.replace('.js', '.mjs');
+                             }
+-                            const ssrEntry = normalizePath(filePrefix + ssrEntryPath);
++                            const ssrEntry = normalizePath(ssrEntryPath);
+                             nitroConfig.alias = {
+                                 ...nitroConfig.alias,
+                                 '#analog/ssr': ssrEntry,
+@@ -437,12 +437,12 @@ export function nitro(options, nitroOptions) {
+                         await buildSitemap(config, options.prerender.sitemap, nitroConfig.prerender.routes, clientOutputPath, routeSitemaps, options.i18n);
+                     }
+                     let ssrEntryPath = resolve(options?.ssrBuildDir ||
+-                        resolve(workspaceRoot, 'dist', rootDir, `ssr`), `main.server${filePrefix ? '.js' : ''}`);
++                        resolve(workspaceRoot, 'dist', rootDir, `ssr`), `main.server${isWindows ? ".js" : ""}`);
+                     // add check for main.server.mjs fallback on Windows
+                     if (isWindows && !existsSync(ssrEntryPath)) {
+                         ssrEntryPath = ssrEntryPath.replace('.js', '.mjs');
+                     }
+-                    const ssrEntry = normalizePath(filePrefix + ssrEntryPath);
++                    const ssrEntry = normalizePath(ssrEntryPath);
+                     nitroConfig.alias = {
+                         ...nitroConfig.alias,
+                         '#analog/ssr': ssrEntry,
