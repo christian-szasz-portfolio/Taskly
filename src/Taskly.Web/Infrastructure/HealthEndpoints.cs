@@ -14,13 +14,21 @@ public static class HealthEndpoints
     /// <summary>Where it knocks to see whether this instance should be sent requests.</summary>
     public const string ReadinessPath = "/health/ready";
 
+    /// <summary>The configuration key listing the sites that may wake this instance.</summary>
+    public const string WakeOriginsKey = "Health:WakeOrigins";
+
     /// <summary>Maps both probes, with no rate-limiting policy.</summary>
-    public static IEndpointRouteBuilder MapTasklyHealth(this IEndpointRouteBuilder endpoints)
+    /// <param name="endpoints">The route builder.</param>
+    /// <param name="wakeOrigins">Sites allowed to read liveness from a browser; none closes it.</param>
+    public static IEndpointRouteBuilder MapTasklyHealth(this IEndpointRouteBuilder endpoints, string[] wakeOrigins)
     {
         ArgumentNullException.ThrowIfNull(endpoints);
+        ArgumentNullException.ThrowIfNull(wakeOrigins);
 
-        // Touches nothing: a slow first build is not a dead process.
-        endpoints.MapGet(LivenessPath, () => Results.Ok(new { status = "alive" }));
+        // Touches nothing: a slow first build is not a dead process. The portfolio pings it when
+        // its project page opens, so the demo is warm by the click.
+        endpoints.MapGet(LivenessPath, () => Results.Ok(new { status = "alive" }))
+            .RequireCors(policy => policy.WithOrigins(wakeOrigins).WithMethods("GET"));
 
         // Reads the demo data, which both answers the question and warms the cache.
         endpoints.MapGet(ReadinessPath, (IDemoStore store) => Results.Ok(new

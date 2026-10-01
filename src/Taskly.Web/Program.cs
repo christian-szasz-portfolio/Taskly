@@ -132,7 +132,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapControllers();
-app.MapTasklyHealth();
+app.MapTasklyHealth(app.Configuration.GetSection(HealthEndpoints.WakeOriginsKey).Get<string[]>() ?? []);
 ConfigureStaticAssets(app);
 
 app.Lifetime.ApplicationStarted.Register(() =>

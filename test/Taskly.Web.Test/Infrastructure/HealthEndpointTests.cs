@@ -14,6 +14,8 @@ using Taskly.Web.Infrastructure;
 [TestClass]
 public sealed class HealthEndpointTests
 {
+    private const string WakeOrigin = "https://portfolio.example";
+
     [TestMethod]
     public async Task Liveness_SaysTheProcessIsUpWithoutReadingTheData()
     {
@@ -64,6 +66,56 @@ public sealed class HealthEndpointTests
         Assert.AreEqual("1", projects);
     }
 
+    /// <summary>The portfolio wakes the demo from its project page and must be able to read the answer.</summary>
+    [TestMethod]
+    public async Task Liveness_LetsTheWakingSiteReadIt()
+    {
+        // Arrange
+        using var host = await StartAsync(new CountingStore());
+        using var client = host.GetTestClient();
+        using var request = new HttpRequestMessage(HttpMethod.Get, HealthEndpoints.LivenessPath);
+        request.Headers.Add("Origin", WakeOrigin);
+
+        // Act
+        using var response = await client.SendAsync(request);
+
+        // Assert
+        Assert.AreEqual(WakeOrigin, response.Headers.GetValues("Access-Control-Allow-Origin").Single());
+    }
+
+    [TestMethod]
+    public async Task Liveness_StaysClosedToAnyOtherSite()
+    {
+        // Arrange
+        using var host = await StartAsync(new CountingStore());
+        using var client = host.GetTestClient();
+        using var request = new HttpRequestMessage(HttpMethod.Get, HealthEndpoints.LivenessPath);
+        request.Headers.Add("Origin", "https://elsewhere.example");
+
+        // Act
+        using var response = await client.SendAsync(request);
+
+        // Assert
+        Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
+    [TestMethod]
+    public async Task Readiness_StaysClosedEvenToTheWakingSite()
+    {
+        // Arrange
+        using var host = await StartAsync(new CountingStore());
+        using var client = host.GetTestClient();
+        using var request = new HttpRequestMessage(HttpMethod.Get, HealthEndpoints.ReadinessPath);
+        request.Headers.Add("Origin", WakeOrigin);
+
+        // Act
+        using var response = await client.SendAsync(request);
+
+        // Assert
+        Assert.IsFalse(response.Headers.Contains("Access-Control-Allow-Origin"));
+    }
+
     private static async Task<string?> PropertyAsync(HttpResponseMessage response, string name)
     {
         using var document = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
@@ -80,12 +132,14 @@ public sealed class HealthEndpointTests
                 .ConfigureServices(services =>
                 {
                     services.AddRouting();
+                    services.AddCors();
                     services.AddSingleton(store);
                 })
                 .Configure(app =>
                 {
                     app.UseRouting();
-                    app.UseEndpoints(endpoints => endpoints.MapTasklyHealth());
+                    app.UseCors();
+                    app.UseEndpoints(endpoints => endpoints.MapTasklyHealth([WakeOrigin]));
                 }))
             .StartAsync();
     }
