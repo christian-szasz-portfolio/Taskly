@@ -54,7 +54,9 @@ services.AddExceptionHandler<ApiExceptionHandler>();
 services.AddOpenApi();
 
 // Security features (kept from the full app — no auth/EF dependency):
-// security headers + CSP, CORS, rate limiting, antiforgery.
+// security headers + CSP, CORS, rate limiting. No antiforgery: the demo's one endpoint is a GET,
+// so there is no token to validate, and registering it generates data-protection keys that are
+// lost with every container.
 var securityHeadersOptions = builder.Configuration.GetSection("Security").Get<SecurityHeadersPolicyOptions>()
     ?? new SecurityHeadersPolicyOptions();
 var cspOptions = builder.Configuration.GetSection(CspPolicyOptions.SectionName).Get<CspPolicyOptions>()
@@ -65,7 +67,6 @@ var corsOptions = builder.Configuration.GetSection(CorsPolicyOptions.SectionName
 services.AddSingleton(securityHeadersOptions);
 services.AddSingleton(cspOptions);
 services.AddScoped<INonceService, NonceService>();
-services.AddAntiforgery();
 
 // Deployed origin comes from Security__Cors__AllowedOrigins__0 as a real environment variable
 // (ASP.NET Core's double-underscore binding), not a token inside this file: nothing here expands
@@ -118,12 +119,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseResponseCompression();
-app.UseHttpsRedirection();
 app.UseSecurityHeaders();
 app.UseRouting();
 app.UseCors("frontend");
 app.UseRateLimiter();
-app.UseAntiforgery();
 
 if (app.Environment.IsDevelopment())
 {
