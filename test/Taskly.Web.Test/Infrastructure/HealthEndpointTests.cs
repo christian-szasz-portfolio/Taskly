@@ -66,7 +66,7 @@ public sealed class HealthEndpointTests
         Assert.AreEqual("1", projects);
     }
 
-    /// <summary>The portfolio wakes the demo from its project page and must be able to read the answer.</summary>
+    /// <summary>The portfolio wakes the demo on landing and must be able to read the answer.</summary>
     [TestMethod]
     public async Task Liveness_LetsTheWakingSiteReadIt()
     {

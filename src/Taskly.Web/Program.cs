@@ -54,9 +54,7 @@ services.AddExceptionHandler<ApiExceptionHandler>();
 services.AddOpenApi();
 
 // Security features (kept from the full app — no auth/EF dependency):
-// security headers + CSP, CORS, rate limiting. No antiforgery: the demo's one endpoint is a GET,
-// so there is no token to validate, and registering it generates data-protection keys that are
-// lost with every container.
+// security headers + CSP, CORS, rate limiting.
 var securityHeadersOptions = builder.Configuration.GetSection("Security").Get<SecurityHeadersPolicyOptions>()
     ?? new SecurityHeadersPolicyOptions();
 var cspOptions = builder.Configuration.GetSection(CspPolicyOptions.SectionName).Get<CspPolicyOptions>()

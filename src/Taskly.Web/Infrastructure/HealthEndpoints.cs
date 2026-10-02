@@ -17,16 +17,13 @@ public static class HealthEndpoints
     /// <summary>The configuration key listing the sites that may wake this instance.</summary>
     public const string WakeOriginsKey = "Health:WakeOrigins";
 
-    /// <summary>Maps both probes, with no rate-limiting policy.</summary>
-    /// <param name="endpoints">The route builder.</param>
-    /// <param name="wakeOrigins">Sites allowed to read liveness from a browser; none closes it.</param>
+    /// <summary>Maps both probes with no rate limit; only the wake origins may read liveness.</summary>
     public static IEndpointRouteBuilder MapTasklyHealth(this IEndpointRouteBuilder endpoints, string[] wakeOrigins)
     {
         ArgumentNullException.ThrowIfNull(endpoints);
         ArgumentNullException.ThrowIfNull(wakeOrigins);
 
-        // Touches nothing: a slow first build is not a dead process. The portfolio pings it when
-        // its project page opens, so the demo is warm by the click.
+        // Touches nothing: a slow first build is not a dead process.
         endpoints.MapGet(LivenessPath, () => Results.Ok(new { status = "alive" }))
             .RequireCors(policy => policy.WithOrigins(wakeOrigins).WithMethods("GET"));
 
