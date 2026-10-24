@@ -157,7 +157,9 @@ public sealed class ContentSecurityPolicyBuilderTests
 
         var result = builder.Build();
 
-        Assert.Contains("font-src 'self' data: https://fonts.gstatic.com", result);
+        var fontSrcPart = result.Split(';')
+            .First(d => d.Trim().StartsWith("font-src")).Trim();
+        Assert.AreEqual("font-src 'self' data:", fontSrcPart);
     }
 
     [TestMethod]
@@ -349,14 +351,14 @@ public sealed class ContentSecurityPolicyBuilderTests
     }
 
     [TestMethod]
-    public void Build_ContainsStyleSrcWithGoogleFonts()
+    public void Build_StyleAndFontSourcesNameNoThirdParty()
     {
         var builder = new ContentSecurityPolicyBuilder("nonce", isDevelopment: false);
 
         var result = builder.Build();
 
-        var styleSrcPart = result.Split(';')
-            .First(d => d.Trim().StartsWith("style-src"));
-        Assert.Contains("https://fonts.googleapis.com", styleSrcPart);
+        // Fonts are self-hosted, so nothing should reach Google
+        Assert.DoesNotContain("fonts.googleapis.com", result);
+        Assert.DoesNotContain("fonts.gstatic.com", result);
     }
 }

@@ -70,7 +70,7 @@ public sealed class ContentSecurityPolicyBuilder(string nonce, bool isDevelopmen
 
     private void AddStyleSrc()
     {
-        var sources = new List<string> { "'self'", "https://fonts.googleapis.com" };
+        var sources = new List<string> { "'self'" };
 
         if (this.options.AllowInlineStyles)
         {
@@ -97,8 +97,8 @@ public sealed class ContentSecurityPolicyBuilder(string nonce, bool isDevelopmen
 
     private void AddFontSrc()
     {
-        // Allow Google Fonts
-        this.directives.Add("font-src 'self' data: https://fonts.gstatic.com");
+        // Fonts are self-hosted under /fonts
+        this.directives.Add("font-src 'self' data:");
     }
 
     private void AddConnectSrc()
